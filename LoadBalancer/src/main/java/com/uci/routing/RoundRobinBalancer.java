@@ -12,7 +12,7 @@ public class RoundRobinBalancer extends AbstractBalancer {
 
     // get the next slot by using the using round-robin approach
     private synchronized int nextServerSlot() {
-        return (serverIdx + 1) % serverCache.size();
+        return (++serverIdx) % serverCache.size();
     }
 
     @Override
@@ -21,7 +21,13 @@ public class RoundRobinBalancer extends AbstractBalancer {
         Server server = getServer(curIndex);
         String resuestPath = request.setIp(server.getIp()).setPort(request.getPort()).toString();
 
+        switch (request.getType()){
+            case POST:
 
+                break;
+            case GET:
+                break;
+        }
     }
 }
 
