@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/miya")
 public class MiyaApi {
 
-
     @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
     public String query(@PathVariable String query) {
         return null;
