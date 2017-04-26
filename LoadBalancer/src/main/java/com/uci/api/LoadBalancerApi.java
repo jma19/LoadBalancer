@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/load")
-public class MiyaApi {
+public class LoadBalancerApi {
 
     @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
     public String query(@PathVariable String query) {
