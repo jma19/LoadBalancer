@@ -1,0 +1,15 @@
+    {{#if records}}
+        {{#each records}}
+            <article>
+                <a href="{{this.attributes.url}}"><h4>{{this.attributes.title}}</h4></a>
+                <p>{{this.attributes.desc}}</p>
+                <a href="{{this.attributes.url}}">{{this.attributes.url}}</a>
+            </article>
+        {{/each}}
+    {{else}}
+        {{#if error}}
+            <h4>error</h4>
+        {{else}}
+            <h4>No records</h4>
+        {{/if}}
+    {{/if}}
