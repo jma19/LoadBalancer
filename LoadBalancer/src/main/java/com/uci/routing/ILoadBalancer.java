@@ -12,6 +12,8 @@ public interface ILoadBalancer {
 
     boolean remove(Server server);
 
+    Server getServer(int index);
+
     void distributeRequest(Request request);
 }
 

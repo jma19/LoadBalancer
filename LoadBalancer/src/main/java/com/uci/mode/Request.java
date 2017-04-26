@@ -4,10 +4,20 @@ package com.uci.mode;
  * Created by junm5 on 4/25/17.
  */
 public class Request {
+    private HttpMethodType type;
     private String ip;
     private Integer port;
     private String path;
     private String parameters;
+
+    public HttpMethodType getType() {
+        return type;
+    }
+
+    public Request setType(HttpMethodType type) {
+        this.type = type;
+        return this;
+    }
 
     public String getIp() {
         return ip;
@@ -47,11 +57,11 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
-                "ip='" + ip + '\'' +
-                ", port=" + port +
-                ", path='" + path + '\'' +
-                ", parameters='" + parameters + '\'' +
-                '}';
+        return new StringBuffer()
+                .append(this.getIp())
+                .append(":")
+                .append(this.getPort())
+                .append("/")
+                .append(this.getPath()).toString();
     }
 }

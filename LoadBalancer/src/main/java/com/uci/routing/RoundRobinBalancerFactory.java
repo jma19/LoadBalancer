@@ -7,6 +7,6 @@ public class RoundRobinBalancerFactory implements ILoadBalancerFactory {
 
     @Override
     public ILoadBalancer createLoadBalancer() {
-        return null;
+        return new RoundRobinBalancer();
     }
 }

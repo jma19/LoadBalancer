@@ -1,6 +1,7 @@
 package com.uci.routing;
 
 import com.uci.mode.Request;
+import com.uci.mode.Server;
 
 /**
  * Created by junm5 on 4/25/17.
@@ -14,10 +15,11 @@ public class RoundRobinBalancer extends AbstractBalancer {
         return (serverIdx + 1) % serverCache.size();
     }
 
-
     @Override
     public void distributeRequest(Request request) {
         int curIndex = nextServerSlot();
+        Server server = getServer(curIndex);
+        String resuestPath = request.setIp(server.getIp()).setPort(request.getPort()).toString();
 
 
     }
