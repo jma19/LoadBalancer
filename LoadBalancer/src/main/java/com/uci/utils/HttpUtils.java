@@ -1,15 +1,21 @@
 package com.uci.utils;
 
-import com.uci.mode.Request;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
+import java.util.List;
 
 import static org.apache.http.HttpHeaders.USER_AGENT;
 
@@ -22,9 +28,20 @@ public class HttpUtils {
      *
      * @return
      */
-    public static String post(String url) {
+    public static String post(String url, List<NameValuePair> params) {
+        CloseableHttpClient httpclient = HttpClientBuilder.create().build();
+        HttpPost httppost = new HttpPost(url);
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(params));
+            CloseableHttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            return EntityUtils.toString(entity, "utf-8");
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        } finally {
+            httppost.releaseConnection();
+        }
         return null;
-
     }
 
 
