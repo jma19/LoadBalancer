@@ -1,6 +1,9 @@
 package com.uci.utils;
 
+import com.google.api.client.testing.json.AbstractJsonParserTest;
 import com.google.gson.Gson;
+
+import java.util.Arrays;
 
 public class JsonUtils {
     private JsonUtils() {
@@ -13,6 +16,7 @@ public class JsonUtils {
     }
 
     public static <T> T toObject(String json, Class<T> clas) {
+
         return gson.fromJson(json, clas);
     }
 }

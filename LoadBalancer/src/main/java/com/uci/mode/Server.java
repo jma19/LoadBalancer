@@ -1,11 +1,30 @@
 package com.uci.mode;
 
+import java.util.Stack;
+
 /**
  * Created by junm5 on 4/25/17.
  */
 public class Server {
     private String ip;
     private Integer port;
+    private Status status;
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public String getIp() {
         return ip;
