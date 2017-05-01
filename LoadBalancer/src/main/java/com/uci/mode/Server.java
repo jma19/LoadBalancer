@@ -6,9 +6,18 @@ import java.util.Stack;
  * Created by junm5 on 4/25/17.
  */
 public class Server {
+    private Integer id;
     private String ip;
     private Integer port;
     private Status status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getPort() {
         return port;

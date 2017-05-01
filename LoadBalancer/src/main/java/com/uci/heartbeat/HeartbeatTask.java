@@ -1,7 +1,6 @@
 package com.uci.heartbeat;
 
 import com.uci.mode.Server;
-import com.uci.mode.Status;
 import com.uci.utils.HttpUtils;
 
 import java.util.TimerTask;
@@ -13,10 +12,12 @@ public class HeartbeatTask extends TimerTask {
     private final Server server;
     private final int[] schedule;
     private int index = 0;
+    private boolean backOff = false;
 
-    public HeartbeatTask(Server server, int[] schedule) {
+    public HeartbeatTask(Server server, int[] schedule, boolean backOff) {
         this.server = server;
         this.schedule = schedule;
+        this.backOff = backOff;
     }
 
     @Override
@@ -34,20 +35,31 @@ public class HeartbeatTask extends TimerTask {
 
     @Override
     public void run() {
-        Status temp = Status.DEAD;
-        while (temp == Status.DEAD && index < schedule.length) {
+        boolean res = false;
+        while (res && index < schedule.length) {
             try {
                 HttpUtils.get(server.toString());
-                temp = Status.ALIVE;
+                res = true;
             } catch (Exception exp) {
-                try {
-                    Thread.sleep(schedule[index]);
+                System.out.println("heartbeat fails:" + server);
+                if (backOff) {
+                    delay(schedule[index]);
                     index++;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
+        // heart check failed
+        if (!res) {
+
+        }
         index = 0;
+    }
+
+    protected void delay(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

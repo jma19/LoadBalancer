@@ -7,14 +7,14 @@ import java.util.Timer;
  */
 public class HeartBeatTimer {
     private Timer timer = new Timer();
-    private HeartbeatTask heatbeatChecker;
+    private HeartbeatTask heartbeatTask;
 
-    public HeartBeatTimer(HeartbeatTask heatbeatChecker) {
-        this.heatbeatChecker = heatbeatChecker;
+    public HeartBeatTimer(HeartbeatTask heartbeatTask) {
+        this.heartbeatTask = heartbeatTask;
     }
 
     public void scheduleAtFixedRate(long start, long peroid) {
-        timer.scheduleAtFixedRate(heatbeatChecker, start, peroid);
+        timer.scheduleAtFixedRate(heartbeatTask, start, peroid);
     }
 
     public void cancel() {
@@ -28,13 +28,13 @@ public class HeartBeatTimer {
 
         HeartBeatTimer that = (HeartBeatTimer) o;
 
-        return heatbeatChecker != null ? heatbeatChecker.equals(that.heatbeatChecker) : that.heatbeatChecker == null;
+        return heartbeatTask != null ? heartbeatTask.equals(that.heartbeatTask) : that.heartbeatTask == null;
 
     }
 
     @Override
     public int hashCode() {
-        return heatbeatChecker != null ? heatbeatChecker.hashCode() : 0;
+        return heartbeatTask != null ? heartbeatTask.hashCode() : 0;
     }
 }
 
