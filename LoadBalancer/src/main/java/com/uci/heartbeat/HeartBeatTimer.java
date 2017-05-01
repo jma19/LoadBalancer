@@ -1,8 +1,6 @@
 package com.uci.heartbeat;
 
 import java.util.Timer;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by junm5 on 4/30/17.
@@ -10,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 public class HeartBeatTimer {
     private Timer timer = new Timer();
     private HeartbeatTask heatbeatChecker;
-    //delay five minutes
-    private long delayTime = 300000;
 
     public HeartBeatTimer(HeartbeatTask heatbeatChecker) {
         this.heatbeatChecker = heatbeatChecker;

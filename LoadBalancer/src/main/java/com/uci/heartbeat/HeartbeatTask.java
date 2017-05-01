@@ -48,5 +48,6 @@ public class HeartbeatTask extends TimerTask {
                 }
             }
         }
+        index = 0;
     }
 }
