@@ -14,4 +14,5 @@ public class LoadBalancerApi {
         System.out.println("receiving :" + query);
         return "";
     }
+
 }

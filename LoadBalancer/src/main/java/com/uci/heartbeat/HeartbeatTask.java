@@ -11,9 +11,12 @@ import java.util.TimerTask;
  */
 public class HeartbeatTask extends TimerTask {
     private final Server server;
+    private final int[] schedule;
+    private int index = 0;
 
-    public HeartbeatTask(Server server) {
+    public HeartbeatTask(Server server, int[] schedule) {
         this.server = server;
+        this.schedule = schedule;
     }
 
     @Override
@@ -31,9 +34,19 @@ public class HeartbeatTask extends TimerTask {
 
     @Override
     public void run() {
-        String res = HttpUtils.get(server.toString());
-        if (res == null) {
-            server.setStatus(Status.DEAD);
+        Status temp = Status.DEAD;
+        while (temp == Status.DEAD && index < schedule.length) {
+            try {
+                HttpUtils.get(server.toString());
+                temp = Status.ALIVE;
+            } catch (Exception exp) {
+                try {
+                    Thread.sleep(schedule[index]);
+                    index++;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

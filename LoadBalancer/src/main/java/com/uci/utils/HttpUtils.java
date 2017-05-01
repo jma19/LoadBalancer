@@ -28,6 +28,8 @@ public class HttpUtils {
      *
      * @return
      */
+    private final String EMPTY = "";
+
     public static String post(String url, List<NameValuePair> params) {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(url);
