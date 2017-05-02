@@ -23,7 +23,6 @@ public class RoundRobinBalancer extends AbstractBalancer {
         Server server = getServer(curIndex);
         String resuestPath = request.setIp(server.getIp()).setPort(request.getPort()).toString();
 
-        //
     }
 }
 
