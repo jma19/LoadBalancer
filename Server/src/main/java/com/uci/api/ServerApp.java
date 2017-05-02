@@ -1,5 +1,6 @@
 package com.uci.api;
 
+import com.uci.mode.Response;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +15,7 @@ public class ServerApp implements IServer {
 
     @Override
     @RequestMapping(path = "/ping", method = RequestMethod.GET)
-    public String ping() {
-        return DEFAULT_REPLY;
+    public Response ping() {
+        return Response.success("OK");
     }
 }
