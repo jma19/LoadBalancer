@@ -15,32 +15,36 @@ public class Server {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Server setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public Integer getPort() {
         return port;
     }
 
-    public void setPort(Integer port) {
+    public Server setPort(Integer port) {
         this.port = port;
+        return this;
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public Server setStatus(Status status) {
         this.status = status;
+        return this;
     }
 
     public String getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public Server setIp(String ip) {
         this.ip = ip;
+        return this;
     }
 
     @Override

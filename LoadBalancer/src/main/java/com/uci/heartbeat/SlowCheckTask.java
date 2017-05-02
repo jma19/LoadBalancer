@@ -21,7 +21,7 @@ public class SlowCheckTask extends HeartbeatTask {
                 HttpUtils.get("");
                 return;
             } catch (Exception exp) {
-                System.out.println(String.format("slow check failed i = %s!!!", i));
+                System.out.println(String.format("slow check failed...!!!"));
             }
         }
     }
