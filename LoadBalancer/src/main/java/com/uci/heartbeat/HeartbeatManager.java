@@ -21,6 +21,7 @@ public class HeartbeatManager {
     private HeartbeatManager() {
 
     }
+
     public static HeartbeatManager getHeartbeatManager() {
         return heartbeatManager;
     }
