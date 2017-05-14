@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class ServerApplication {
     public static void main(String[] args) {
-        //http://ketqi.blog.51cto.com/1130608/325255/
         SpringApplication.run(ServerApplication.class, args);
     }
 

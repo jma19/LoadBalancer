@@ -13,13 +13,6 @@
     <artifactId>loadbalancer</artifactId>
     <version>0.1.0</version>
 
-
-    <!--<parent>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-parent</artifactId>-->
-        <!--<version>1.5.1.RELEASE</version>-->
-    <!--</parent>-->
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -57,40 +50,46 @@
             <artifactId>http-request</artifactId>
             <version>5.6</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.10.2</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.api.client/google-api-client -->
         <dependency>
             <groupId>com.google.api.client</groupId>
             <artifactId>google-api-client</artifactId>
             <version>1.4.0-alpha</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-customsearch -->
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.datatype</groupId>-->
+            <!--<artifactId>jackson-datatype-joda</artifactId>-->
+            <!--<version>2.8.7</version>-->
+        <!--</dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl -->
+
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-x-discovery -->
         <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-customsearch</artifactId>
-            <version>v1-rev53-1.22.0</version>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>3.3.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-            <version>2.8.7</version>
-        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+
     </dependencies>
 
     <properties>
