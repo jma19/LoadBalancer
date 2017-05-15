@@ -25,6 +25,9 @@ public class RoundRobinBalancer implements ILoadBalancer {
 
     // get the next slot by using the using round-robin approach
     private synchronized int nextServerSlot() {
+        if (serverCache.size() == 0) {
+            return -1;
+        }
         return (++serverIdx) % serverCache.size();
     }
 
@@ -46,8 +49,11 @@ public class RoundRobinBalancer implements ILoadBalancer {
     @Override
     public void distributeRequest(Request request) {
         int curIndex = nextServerSlot();
+        if (curIndex == -1) {
+            System.out.println("No Server can be distributed!!!");
+        }
         ServerInstance server = getServer(curIndex);
-        System.out.println("server_"+ server+ "_distribute");
+        System.out.println("server_" + server + "_distribute");
     }
 }
 
