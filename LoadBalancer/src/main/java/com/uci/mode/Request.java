@@ -18,7 +18,7 @@ public class Request {
         this.type = type;
         return this;
     }
-
+    
     public String getIp() {
         return ip;
     }

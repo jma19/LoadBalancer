@@ -1,18 +1,20 @@
 package com.uci.routing;
 
 import com.uci.mode.Request;
-import com.uci.mode.Server;
+import com.uci.mode.ServerInstance;
+
+import java.util.List;
 
 /**
  * Created by junm5 on 4/25/17.
  */
 public interface ILoadBalancer {
 
-    boolean addServer(Server server);
+    void reloadCache(List<ServerInstance> serverInstanceList);
 
-    boolean remove(Server server);
+    boolean remove(ServerInstance server);
 
-    Server getServer(int index);
+    ServerInstance getServer(int index);
 
     void distributeRequest(Request request);
 }
