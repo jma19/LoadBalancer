@@ -74,7 +74,6 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         System.out.println("cacheChanged");
         try {
             List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
-            System.out.println("ServiceInstance size = " + serviceInstances);
             if (serviceInstances != null && !serviceInstances.isEmpty()) {
                 List<ServerInstance> serverInstances = serviceInstances.stream()
                         .map(serviceInstance -> getServerInstance(serviceInstance))
