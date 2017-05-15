@@ -47,7 +47,6 @@ public class RoundRobinBalancer implements ILoadBalancer {
     public void distributeRequest(Request request) {
         int curIndex = nextServerSlot();
         ServerInstance server = getServer(curIndex);
-        String resuestPath = request.setIp(server.getIp()).setPort(request.getPort()).toString();
         System.out.println("server_"+ server+ "_distribute");
     }
 }

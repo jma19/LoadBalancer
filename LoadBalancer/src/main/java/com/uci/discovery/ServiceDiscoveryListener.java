@@ -45,12 +45,16 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     private ILoadBalancer iLoadBalancer;
 
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         client = CuratorFrameworkFactory.newClient(connection, retryPolicy);
         JsonInstanceSerializer<InstanceDetails> serializer = new JsonInstanceSerializer<>(InstanceDetails.class);
         serviceDiscovery = ServiceDiscoveryBuilder.builder(InstanceDetails.class).client(client).basePath(PATH).serializer(serializer).build();
         serviceCache = serviceDiscovery.serviceCacheBuilder().name(CACHE_NAME).build();
         serviceCache.addListener(this);
+
+        client.start();
+        serviceDiscovery.start();
+        serviceCache.start();
     }
 
     private List<ServiceInstance<InstanceDetails>> queryAllServiceInstance(String cachName) throws Exception {
@@ -70,10 +74,13 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         System.out.println("cacheChanged");
         try {
             List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
+            System.out.println("ServiceInstance size = " + serviceInstances);
             if (serviceInstances != null && !serviceInstances.isEmpty()) {
                 List<ServerInstance> serverInstances = serviceInstances.stream()
                         .map(serviceInstance -> getServerInstance(serviceInstance))
                         .collect(Collectors.toList());
+                System.out.println("server instance size is " + serverInstances.size());
+                System.out.println(serverInstances);
                 iLoadBalancer.reloadCache(serverInstances);
             }
         } catch (Exception e) {
