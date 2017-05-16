@@ -57,8 +57,8 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         serviceCache.start();
     }
 
-    private List<ServiceInstance<InstanceDetails>> queryAllServiceInstance(String cachName) throws Exception {
-        Collection<ServiceInstance<InstanceDetails>> instances = serviceDiscovery.queryForInstances(CACHE_NAME);
+    private List<ServiceInstance<InstanceDetails>> queryAllServiceInstance(String cacheName) throws Exception {
+        Collection<ServiceInstance<InstanceDetails>> instances = serviceDiscovery.queryForInstances(cacheName);
         return Lists.newArrayList(instances);
     }
 

@@ -14,12 +14,18 @@ public class LoadBalancerApi {
     @Autowired
     private ILoadBalancer iLoadBalancer;
 
+
+    /**
+     * https://docs.spring.io/spring-session/docs/current/reference/html5/guides/rest.html
+     * for each request, server needs to keep the connection; this storage should be in-memory
+     * @param query
+     * @return
+     */
     @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
     public String query(@PathVariable String query) {
         System.out.println("receiving :" + query);
         iLoadBalancer.distributeRequest(null);
         return "OK";
     }
-
 
 }
