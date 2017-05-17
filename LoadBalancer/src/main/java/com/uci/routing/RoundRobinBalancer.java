@@ -1,5 +1,6 @@
 package com.uci.routing;
 
+import com.uci.mode.HttpMethodType;
 import com.uci.mode.Request;
 import com.uci.mode.ServerInstance;
 import org.springframework.stereotype.Component;
@@ -53,6 +54,13 @@ public class RoundRobinBalancer implements ILoadBalancer {
             System.out.println("No Server can be distributed!!!");
         }
         ServerInstance server = getServer(curIndex);
+        if (HttpMethodType.GET == request.getType()) {
+            if (request.getParameters() != null) {
+
+            }
+        } else if (HttpMethodType.POST == request.getType()) {
+
+        }
         System.out.println("server_" + server + "_distribute");
     }
 }
