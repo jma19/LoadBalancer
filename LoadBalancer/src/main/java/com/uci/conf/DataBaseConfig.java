@@ -35,7 +35,7 @@ public class DataBaseConfig {
         DruidDataSource druidDataSource = new DruidDataSource();
         return druidDataSource;
     }
-
+    
     @Bean
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(dataSource());

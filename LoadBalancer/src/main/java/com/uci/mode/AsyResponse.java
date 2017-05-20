@@ -6,7 +6,7 @@ package com.uci.mode;
 public class AsyResponse {
     private Long id;
     private String remark;
-    private Boolean isSuccess;
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -26,12 +26,12 @@ public class AsyResponse {
         return this;
     }
 
-    public Boolean getSuccess() {
-        return isSuccess;
+    public Integer getStatus() {
+        return status;
     }
 
-    public AsyResponse setSuccess(Boolean success) {
-        isSuccess = success;
+    public AsyResponse setStatus(Integer status) {
+        this.status = status;
         return this;
     }
 
@@ -40,7 +40,7 @@ public class AsyResponse {
         return "AsyResponse{" +
                 "id=" + id +
                 ", remark='" + remark + '\'' +
-                ", isSuccess=" + isSuccess +
+                ", status=" + status +
                 '}';
     }
 }

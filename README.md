@@ -15,4 +15,44 @@ requestId, parameters, processed server, process time, status.
 2. Curator usage.
 
 
+3. MySQL
+mysql.server start
 
+
+create database loadB;
+
+CREATE TABLE `tb_request` (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
+    `port` INT(11) NOT NULL  COMMENT 'port number',
+    `type` tinyint(4) NOT NULL  COMMENT 'request type',
+    `path` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'request url path',
+    `params` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'request params json string',
+    `retry_times` int(11) NOT NULL DEFAULT 1 COMMENT 'retry times for a request',
+    `remark` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'remark',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT 'latest request process status',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated time',
+    PRIMARY KEY (`id`),
+    KEY `ix_ip` (`ip`),
+    KEY `ix_created_at` (`created_at`),
+    KEY `ix_updated_at` (`updated_at`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request info';
+
+
+
+CREATE TABLE `tb_request_process` (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `request_id` BIGINT(20) NOT NULL DEFAULT 0  COMMENT 'request id',
+	`ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
+    `port` INT(11) NOT NULL  COMMENT 'port number',
+    `remark` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'remark',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated time',
+    PRIMARY KEY (`id`),
+    KEY `ix_ip` (`ip`),
+    KEY `ix_created_at` (`created_at`),
+    KEY `ix_updated_at` (`updated_at`),
+	FOREIGN KEY (`request_id`) REFERENCES tb_request(`id`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request process history';

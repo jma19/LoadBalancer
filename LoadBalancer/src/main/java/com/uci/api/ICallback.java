@@ -25,8 +25,12 @@ public class ICallback {
      */
     @RequestMapping(path = "/callback", method = RequestMethod.POST)
     public Response callback(@RequestBody AsyResponse asyResponse) {
-
-        return null;
+        try {
+            requestServiceDao.update(asyResponse);
+            return Response.success(null);
+        } catch (Exception exp) {
+            return Response.fail("Server Inner Error, DB operation!!");
+        }
     }
 
 }
