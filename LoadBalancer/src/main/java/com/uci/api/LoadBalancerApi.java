@@ -30,7 +30,6 @@ public class LoadBalancerApi {
         System.out.println("receiving :" + query);
         Request request = new Request().setType(HttpMethodType.GET).setPath(queryPath);
         iLoadBalancer.distributeRequest(request);
-
         return "OK";
     }
 

@@ -9,6 +9,7 @@ public class Request {
     private String ip;
     private Integer port;
     private String path;
+    //json style
     private String parameters;
 
     public Long getId() {

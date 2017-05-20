@@ -1,7 +1,9 @@
 package com.uci.api;
 
+import com.uci.dao.RequestServiceDao;
 import com.uci.mode.AsyResponse;
 import com.uci.mode.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/load")
 public class ICallback {
 
+    @Autowired
+    private RequestServiceDao requestServiceDao;
     /**
-     *
      * @param asyResponse
      * @return
      */
