@@ -8,10 +8,20 @@ public class Request {
     private HttpMethodType type;
     private String ip;
     private Integer port;
+    private Integer retryTimes;
     private String path;
     private Integer status;
     //json style
     private String params;
+
+    public Integer getRetryTimes() {
+        return retryTimes;
+    }
+
+    public Request setRetryTimes(Integer retryTimes) {
+        this.retryTimes = retryTimes;
+        return this;
+    }
 
     public Integer getStatus() {
         return status;
