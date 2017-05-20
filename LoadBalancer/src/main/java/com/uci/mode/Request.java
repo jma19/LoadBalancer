@@ -9,8 +9,18 @@ public class Request {
     private String ip;
     private Integer port;
     private String path;
+    private Integer status;
     //json style
-    private String parameters;
+    private String params;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public Request setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
 
     public Long getId() {
         return id;
@@ -57,12 +67,12 @@ public class Request {
         return this;
     }
 
-    public String getParameters() {
-        return parameters;
+    public String getParams() {
+        return params;
     }
 
-    public Request setParameters(String parameters) {
-        this.parameters = parameters;
+    public Request setParams(String params) {
+        this.params = params;
         return this;
     }
 

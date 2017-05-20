@@ -55,7 +55,7 @@ public class RoundRobinBalancer implements ILoadBalancer {
         }
         ServerInstance server = getServer(curIndex);
         if (HttpMethodType.GET == request.getType()) {
-            if (request.getParameters() != null) {
+            if (request.getParams() != null) {
 
             }
         } else if (HttpMethodType.POST == request.getType()) {

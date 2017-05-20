@@ -12,4 +12,6 @@ public interface RequestServiceDao {
 
     void update(AsyResponse response);
 
+    void insertFailure();
 }
+
