@@ -12,7 +12,17 @@ public class Request {
     private String path;
     private Integer status;
     //json style
+    private String remark;
     private String params;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public Request setRemark(String remark) {
+        this.remark = remark;
+        return this;
+    }
 
     public Integer getRetryTimes() {
         return retryTimes;

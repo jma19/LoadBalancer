@@ -33,7 +33,7 @@ public class LoadBalancerApi {
         return "OK";
     }
 
-    @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
+    @RequestMapping(path = "/query", method = RequestMethod.GET)
     public String queryAsy() {
         return null;
     }

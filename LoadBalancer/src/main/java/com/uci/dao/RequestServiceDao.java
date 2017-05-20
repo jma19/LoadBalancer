@@ -1,6 +1,5 @@
 package com.uci.dao;
 
-import com.uci.mode.AsyResponse;
 import com.uci.mode.FailureRequest;
 import com.uci.mode.Request;
 
@@ -28,19 +27,12 @@ public interface RequestServiceDao {
     void insertFailure(FailureRequest failureRequest);
 
     /**
-     * update asynchronous request status and remark.
-     *
-     * @param response
-     */
-    void updateAsyRequest(AsyResponse response);
-
-
-    /**
-     * when we need to re-distribute the request, we need to update resquest information.
+     * update Request information, there are two situation
+     * 1.receive asynchronous callback
+     * 2.when we need to re-distribute the request, we need to update request information.
      *
      * @param request
      */
-    void updateRetry(Request request);
-
+    void updateRequest(Request request);
 }
 

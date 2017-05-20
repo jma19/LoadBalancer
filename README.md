@@ -5,7 +5,7 @@ Server:
 ServerID, IP, Port, Request number, Average Response Time
 
 Request
-requestId, parameters, processed server, process time, status.
+requestId, params, processed server, process time, status.
 
 
 1. zookeeper install
@@ -15,12 +15,15 @@ requestId, parameters, processed server, process time, status.
 2. Curator usage.
 
 
-3. MySQL
-mysql.server start
+3. MySQL Data Model
+1. mysql.server start
 
+2.  create database loadB;
 
-create database loadB;
+3. create request table, and request failure table. tb_request is used to store request information and record
+the latest status of a request. tb_failure only records the
 
+~~~
 CREATE TABLE `tb_request` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
     `ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
@@ -41,13 +44,13 @@ CREATE TABLE `tb_request` (
 
 
 
-CREATE TABLE `tb_request_process` (
+
+CREATE TABLE `tb_request_failure` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
     `request_id` BIGINT(20) NOT NULL DEFAULT 0  COMMENT 'request id',
 	`ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
     `port` INT(11) NOT NULL  COMMENT 'port number',
-    `remark` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'remark',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '',
+    `remark` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'fail reasons',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated time',
     PRIMARY KEY (`id`),
@@ -55,4 +58,6 @@ CREATE TABLE `tb_request_process` (
     KEY `ix_created_at` (`created_at`),
     KEY `ix_updated_at` (`updated_at`),
 	FOREIGN KEY (`request_id`) REFERENCES tb_request(`id`)
-)  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request process history';
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request failure history';
+
+~~~

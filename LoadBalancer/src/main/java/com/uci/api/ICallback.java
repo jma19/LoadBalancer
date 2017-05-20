@@ -2,6 +2,7 @@ package com.uci.api;
 
 import com.uci.dao.RequestServiceDao;
 import com.uci.mode.AsyResponse;
+import com.uci.mode.Request;
 import com.uci.mode.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class ICallback {
 
     @Autowired
     private RequestServiceDao requestServiceDao;
+
     /**
      * @param asyResponse
      * @return
@@ -26,7 +28,8 @@ public class ICallback {
     @RequestMapping(path = "/callback", method = RequestMethod.POST)
     public Response callback(@RequestBody AsyResponse asyResponse) {
         try {
-            requestServiceDao.update(asyResponse);
+            Request request = new Request().setStatus(asyResponse.getStatus()).setId(asyResponse.getId()).setRemark(asyResponse.getRemark());
+            requestServiceDao.updateRequest(request);
             return Response.success(null);
         } catch (Exception exp) {
             return Response.fail("Server Inner Error, DB operation!!");

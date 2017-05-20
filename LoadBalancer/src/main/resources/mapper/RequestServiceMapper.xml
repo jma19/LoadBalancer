@@ -4,40 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.uci.dao.RequestServiceDao">
 
-    <update id="update" parameterType="com.uci.mode.AsyResponse">
-        update tb_request set status = #{status}, remark = #{remark} where id =#{id}
-    </update>
-
-
-    /**
-
-
-    CREATE TABLE `tb_request` (
-    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-    `ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
-    `port` INT(11) NOT NULL COMMENT 'port number',
-    `type` tinyint(4) NOT NULL COMMENT 'request type',
-    `path` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'request url path',
-    `params` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'request params json string',
-    `retry_times` int(11) NOT NULL DEFAULT 1 COMMENT 'retry times for a request',
-    `remark` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'remark',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT 'latest request process status',
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated time',
-    PRIMARY KEY (`id`),
-    KEY `ix_ip` (`ip`),
-    KEY `ix_created_at` (`created_at`),
-    KEY `ix_updated_at` (`updated_at`)
-    ) ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request info';
-
-
-    CREATE TABLE `tb_request_failure` (
-
-    <insert id="insert" parameterType="com.uci.mode.Request" useGeneratedKeys="true">
+    <insert id="insertRequest" parameterType="com.uci.mode.Request" useGeneratedKeys="true">
         INSERT into tb_request (ip, port, type, path, params, retry_times, remark, status)
    		value (#{ip},#{port}, #{type.value}, #{path},#{params},#{retry_times}, #{remark},#{status})
     </insert>
 
+    <insert id="insertFailure" parameterType="com.uci.mode.FailureRequest">
+        INSERT into tb_request_failure(request_id, ip, port, remark) value (#{requestId},#{ip}, #{port}, #{remark})
+    </insert>
 
-    <!---->
+    <update id="updateRequest" parameterType="com.uci.mode.Request">
+        update tb_request
+        <set>
+            <if test="ip!= null">ip=#{ip}</if>
+            <if test="port!= null">port=#{port}</if>
+            <if test="retryTimes!= null">retry_times=#{retryTimes}</if>
+            <if test="status!= null">ip=#{status}</if>
+        </set>
+    </update>
+
 </mapper>
