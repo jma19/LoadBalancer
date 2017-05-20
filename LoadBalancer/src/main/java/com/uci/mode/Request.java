@@ -4,11 +4,21 @@ package com.uci.mode;
  * Created by junm5 on 4/25/17.
  */
 public class Request {
+    private Long id;
     private HttpMethodType type;
     private String ip;
     private Integer port;
     private String path;
     private String parameters;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Request setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public HttpMethodType getType() {
         return type;

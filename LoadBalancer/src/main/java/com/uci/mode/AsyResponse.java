@@ -4,15 +4,15 @@ package com.uci.mode;
  * Created by junm5 on 5/19/17.
  */
 public class AsyResponse {
-    private Integer id;
+    private Long id;
     private String remark;
     private Boolean isSuccess;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public AsyResponse setId(Integer id) {
+    public AsyResponse setId(Long id) {
         this.id = id;
         return this;
     }
