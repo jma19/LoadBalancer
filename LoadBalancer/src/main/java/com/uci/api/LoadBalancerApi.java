@@ -1,6 +1,5 @@
 package com.uci.api;
 
-import com.sun.tools.classfile.Type;
 import com.uci.mode.HttpMethodType;
 import com.uci.mode.Request;
 import com.uci.routing.ILoadBalancer;
@@ -26,12 +25,19 @@ public class LoadBalancerApi {
      * @param query
      * @return
      */
-    @RequestMapping(path = "/query", method = RequestMethod.GET)
+    @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
     public String query(@PathVariable String query) {
         System.out.println("receiving :" + query);
         Request request = new Request().setType(HttpMethodType.GET).setPath(queryPath);
         iLoadBalancer.distributeRequest(request);
+
         return "OK";
     }
+
+    @RequestMapping(path = "/query/{query}", method = RequestMethod.GET)
+    public String queryAsy() {
+        return null;
+    }
+
 
 }
