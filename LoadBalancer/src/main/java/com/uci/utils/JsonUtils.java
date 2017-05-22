@@ -16,7 +16,9 @@ public class JsonUtils {
     }
 
     public static <T> T toObject(String json, Class<T> clas) {
-
+        if (json == null) {
+            return null;
+        }
         return gson.fromJson(json, clas);
     }
 }

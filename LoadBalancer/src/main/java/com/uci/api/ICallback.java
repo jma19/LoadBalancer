@@ -36,6 +36,9 @@ public class ICallback {
             log.debug("callback receive asy response [" + asyResponse + " ]");
             Request request = new Request().setStatus(asyResponse.getStatus()).setId(asyResponse.getId()).setRemark(asyResponse.getRemark());
             requestServiceDao.updateRequest(request);
+            if(asyResponse.getStatus() == 3){
+
+            }
             return Response.success(null);
         } catch (Exception exp) {
             log.error(exp.getMessage(), exp);

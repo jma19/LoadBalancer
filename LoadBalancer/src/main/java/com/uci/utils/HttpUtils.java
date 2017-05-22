@@ -1,5 +1,6 @@
 package com.uci.utils;
 
+import com.uci.mode.LBException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -30,7 +31,7 @@ public class HttpUtils {
      */
     private final String EMPTY = "";
 
-    public static String post(String url, List<NameValuePair> params) {
+    public static String post(String url, List<NameValuePair> params) throws IOException {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(url);
         try {
@@ -39,15 +40,14 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             return EntityUtils.toString(entity, "utf-8");
         } catch (Exception exp) {
-            exp.printStackTrace();
+            throw exp;
         } finally {
             httppost.releaseConnection();
         }
-        return null;
     }
 
 
-    public static String get(String url) {
+    public static String get(String url) throws IOException, LBException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
         request.addHeader("User-Agent", USER_AGENT);
@@ -56,10 +56,10 @@ public class HttpUtils {
             if (response.getStatusLine().getStatusCode() == 200) {
                 return getStringResponse(response);
             }
-        } catch (Exception exp) {
-            exp.printStackTrace();
+            throw new LBException("");
+        } finally {
+            request.releaseConnection();
         }
-        return null;
     }
 
     private static String getStringResponse(HttpResponse httpResponse) throws IOException {

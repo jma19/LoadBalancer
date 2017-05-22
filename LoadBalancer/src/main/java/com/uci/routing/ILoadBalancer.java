@@ -1,6 +1,7 @@
 package com.uci.routing;
 
 import com.uci.mode.Request;
+import com.uci.mode.Response;
 import com.uci.mode.ServerInstance;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface ILoadBalancer {
 
     ServerInstance getServer(int index);
 
-    void distributeRequest(Request request);
+    Response distributeRequest(Request request);
 }
 

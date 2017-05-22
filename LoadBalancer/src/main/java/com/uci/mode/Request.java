@@ -1,5 +1,9 @@
 package com.uci.mode;
 
+import org.apache.http.NameValuePair;
+
+import java.util.List;
+
 /**
  * Created by junm5 on 4/25/17.
  */
@@ -14,6 +18,20 @@ public class Request {
     //json style
     private String remark;
     private String params;
+    private List<NameValuePair> pairs;
+
+    public void increasReTimes(){
+        retryTimes++;
+    }
+
+    public List<NameValuePair> getPairs() {
+        return pairs;
+    }
+
+    public Request setPairs(List<NameValuePair> pairs) {
+        this.pairs = pairs;
+        return this;
+    }
 
     public String getRemark() {
         return remark;
@@ -98,11 +116,17 @@ public class Request {
 
     @Override
     public String toString() {
-        return new StringBuffer()
-                .append(this.getIp())
-                .append(":")
-                .append(this.getPort())
-                .append("/")
-                .append(this.getPath()).toString();
+        return "Request{" +
+                "id=" + id +
+                ", type=" + type +
+                ", ip='" + ip + '\'' +
+                ", port=" + port +
+                ", retryTimes=" + retryTimes +
+                ", path='" + path + '\'' +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                ", params='" + params + '\'' +
+                ", pairs=" + pairs +
+                '}';
     }
 }

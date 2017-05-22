@@ -1,13 +1,13 @@
 package com.uci.api;
 
+import com.google.common.collect.Lists;
 import com.uci.mode.HttpMethodType;
 import com.uci.mode.Request;
+import com.uci.mode.Response;
 import com.uci.routing.ILoadBalancer;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -16,7 +16,8 @@ public class LoadBalancerApi {
     @Autowired
     private ILoadBalancer iLoadBalancer;
 
-    private static String queryPath = "/load/query";
+    private static String queryPath = "/query";
+    private static String postPath = "/post";
 
     /**
      * https://docs.spring.io/spring-session/docs/current/reference/html5/guides/rest.html
@@ -27,16 +28,17 @@ public class LoadBalancerApi {
      */
 
     @RequestMapping(path = "/query/{id}", method = RequestMethod.GET)
-    public String query(@PathVariable Integer id) {
+    public Response query(@PathVariable Integer id) {
         System.out.println("receiving :" + id);
-        Request request = new Request().setType(HttpMethodType.GET).setPath(queryPath);
-        iLoadBalancer.distributeRequest(request);
-        return "OK, server receives: " + id;
+        Request request = new Request().setType(HttpMethodType.GET).setPath(queryPath).setParams("" + id);
+        return iLoadBalancer.distributeRequest(request);
     }
 
-    @RequestMapping(path = "/query", method = RequestMethod.GET)
-    public String queryAsy() {
-        return null;
+    @RequestMapping(path = "/post", method = RequestMethod.POST)
+    public Response queryAsy(@RequestParam Integer id) {
+        Request request = new Request().setType(HttpMethodType.POST)
+                .setPath(postPath).setPairs(Lists.newArrayList(new BasicNameValuePair("id", "" + id)));
+        return iLoadBalancer.distributeRequest(request);
     }
 
 
