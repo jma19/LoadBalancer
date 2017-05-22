@@ -25,4 +25,8 @@ public enum HttpMethodType {
         }
     }
 
+    public int getValue(){
+        return this.value;
+    }
+
 }

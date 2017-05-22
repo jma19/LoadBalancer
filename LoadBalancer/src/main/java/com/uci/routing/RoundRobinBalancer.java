@@ -1,9 +1,13 @@
 package com.uci.routing;
 
+import com.uci.conf.DataBaseConfig;
 import com.uci.dao.RequestServiceDao;
 import com.uci.mode.*;
 import com.uci.utils.HttpUtils;
 import com.uci.utils.JsonUtils;
+import com.uci.utils.ScheduleTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Component
 public class RoundRobinBalancer implements ILoadBalancer {
+
+    private final Logger log = LoggerFactory.getLogger(RoundRobinBalancer.class);
 
     @Autowired
     private RequestServiceDao requestServiceDao;
@@ -33,7 +39,15 @@ public class RoundRobinBalancer implements ILoadBalancer {
 
     @Override
     public void reloadCache(List<ServerInstance> serverInstanceList) {
+        List<ServerInstance> temp = serverCache;
         serverCache = new CopyOnWriteArrayList<>(serverInstanceList);
+        for (ServerInstance serverInstance : temp) {
+            if (!serverInstanceList.contains(serverInstance)) {
+                //获取所有调度到 这台机器上请求，然后将其调度到其他机器上, 数据库port要index
+                log.info("server down [" + serverInstance + "]");
+                ScheduleTask.submit(new )
+            }
+        }
     }
 
     @Override
@@ -64,7 +78,7 @@ public class RoundRobinBalancer implements ILoadBalancer {
                 }
                 return JsonUtils.toObject(res, Response.class);
             } catch (Exception exp) {
-                request.increasReTimes();
+                request.increaseReTimes();
 //              requestServiceDao.insertFailure();
             }
         }

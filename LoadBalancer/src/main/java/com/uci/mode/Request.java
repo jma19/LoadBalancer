@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Request {
     private Long id;
-    private HttpMethodType type;
+    private Integer type;
     private String ip;
     private Integer port;
     private Integer retryTimes;
@@ -20,7 +20,7 @@ public class Request {
     private String params;
     private List<NameValuePair> pairs;
 
-    public void increasReTimes(){
+    public void increaseReTimes(){
         retryTimes++;
     }
 
@@ -69,11 +69,11 @@ public class Request {
         return this;
     }
 
-    public HttpMethodType getType() {
+    public Integer getType() {
         return type;
     }
 
-    public Request setType(HttpMethodType type) {
+    public Request setType(Integer type) {
         this.type = type;
         return this;
     }

@@ -30,13 +30,13 @@ public class LoadBalancerApi {
     @RequestMapping(path = "/query/{id}", method = RequestMethod.GET)
     public Response query(@PathVariable Integer id) {
         System.out.println("receiving :" + id);
-        Request request = new Request().setType(HttpMethodType.GET).setPath(queryPath).setParams("" + id);
+        Request request = new Request().setType(HttpMethodType.GET.getValue()).setPath(queryPath).setParams("" + id);
         return iLoadBalancer.distributeRequest(request);
     }
 
     @RequestMapping(path = "/post", method = RequestMethod.POST)
     public Response queryAsy(@RequestParam Integer id) {
-        Request request = new Request().setType(HttpMethodType.POST)
+        Request request = new Request().setType(HttpMethodType.POST.getValue())
                 .setPath(postPath).setPairs(Lists.newArrayList(new BasicNameValuePair("id", "" + id)));
         return iLoadBalancer.distributeRequest(request);
     }

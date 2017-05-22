@@ -2,6 +2,9 @@ package com.uci.dao;
 
 import com.uci.mode.FailureRequest;
 import com.uci.mode.Request;
+import com.uci.mode.ServerInstance;
+
+import java.util.List;
 
 /**
  * Created by junm5 on 5/19/17.
@@ -34,5 +37,9 @@ public interface RequestServiceDao {
      * @param request
      */
     void updateRequest(Request request);
+
+
+    List<Request> queryAllFinishRequest(ServerInstance serverInstance);
+
 }
 
