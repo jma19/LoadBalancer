@@ -39,6 +39,11 @@ public interface RequestServiceDao {
     void updateRequest(Request request);
 
 
+    /**
+     *
+     * @param serverInstance
+     * @return
+     */
     List<Request> queryAllFinishRequest(ServerInstance serverInstance);
 
 }

@@ -19,6 +19,16 @@ public class Request {
     private String remark;
     private String params;
     private List<NameValuePair> pairs;
+    private InvokeType invokeType;
+
+    public InvokeType getInvokeType() {
+        return invokeType;
+    }
+
+    public Request setInvokeType(InvokeType invokeType) {
+        this.invokeType = invokeType;
+        return this;
+    }
 
     public void increaseReTimes(){
         retryTimes++;
@@ -127,6 +137,7 @@ public class Request {
                 ", remark='" + remark + '\'' +
                 ", params='" + params + '\'' +
                 ", pairs=" + pairs +
+                ", invokeType=" + invokeType +
                 '}';
     }
 }

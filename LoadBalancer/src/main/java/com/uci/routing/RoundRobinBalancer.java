@@ -1,6 +1,5 @@
 package com.uci.routing;
 
-import com.uci.conf.DataBaseConfig;
 import com.uci.dao.RequestServiceDao;
 import com.uci.mode.*;
 import com.uci.utils.HttpUtils;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -29,6 +29,14 @@ public class RoundRobinBalancer implements ILoadBalancer {
 
     protected List<ServerInstance> serverCache = new CopyOnWriteArrayList<>();
 
+    @Autowired
+    private AsyDispatcher asyDispatcher;
+
+    public RoundRobinBalancer() {
+        Thread thread = new Thread(asyDispatcher);
+        thread.start();
+    }
+
     // get the next slot by using the using round-robin approach
     private synchronized int nextServerSlot() {
         if (serverCache.size() == 0) {
@@ -45,7 +53,8 @@ public class RoundRobinBalancer implements ILoadBalancer {
             if (!serverInstanceList.contains(serverInstance)) {
                 //获取所有调度到 这台机器上请求，然后将其调度到其他机器上, 数据库port要index
                 log.info("server down [" + serverInstance + "]");
-                ScheduleTask.submit(new )
+                List<Request> requests = requestServiceDao.queryAllFinishRequest(serverInstance);
+                asyDispatcher.add(requests);
             }
         }
     }
@@ -68,18 +77,17 @@ public class RoundRobinBalancer implements ILoadBalancer {
                 ServerInstance server = getServer(curIndex);
                 StringBuffer url = buildPath(request, server);
                 String res = null;
-                if (HttpMethodType.GET == request.getType()) {
+                if (HttpMethodType.GET.getValue() == request.getType()) {
                     if (request.getParams() != null) {
                         url.append("/" + request.getParams());
                     }
                     res = HttpUtils.get(url.toString());
-                } else if (HttpMethodType.POST == request.getType()) {
+                } else if (HttpMethodType.POST.getValue() == request.getType()) {
                     res = HttpUtils.post(url.toString(), request.getPairs());
                 }
                 return JsonUtils.toObject(res, Response.class);
             } catch (Exception exp) {
                 request.increaseReTimes();
-//              requestServiceDao.insertFailure();
             }
         }
         return Response.fail("No Server Available!");
