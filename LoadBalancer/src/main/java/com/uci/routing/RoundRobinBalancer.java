@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.uci.mode.RequestStatus.EXECUTING;
+import static com.uci.mode.RequestStatus.FINISHING;
 
 /**
  * Created by junm5 on 4/25/17.
@@ -54,9 +56,30 @@ public class RoundRobinBalancer implements ILoadBalancer {
                 //获取所有调度到 这台机器上请求，然后将其调度到其他机器上, 数据库port要index
                 log.info("server down [" + serverInstance + "]");
                 List<Request> requests = requestServiceDao.queryAllFinishRequest(serverInstance);
+                for (Request request : requests) {
+                    ScheduleTask.submit(() -> {
+                                try {
+                                    requestServiceDao.insertFailure(getFailureRequest(request));
+                                    return true;
+                                } catch (Exception exp) {
+                                    log.error("invoke requestServiceDao.insertFailure fail", exp);
+                                    return false;
+                                }
+                            }
+                    );
+                }
                 asyDispatcher.add(requests);
             }
         }
+    }
+
+    private FailureRequest getFailureRequest(Request request) {
+        return new FailureRequest()
+                .setIp(request.getIp())
+                .setPath(request.getPath())
+                .setPort(request.getPort())
+                .setRemark("Server Down")
+                .setRequestId(request.getId());
     }
 
     @Override
@@ -85,8 +108,18 @@ public class RoundRobinBalancer implements ILoadBalancer {
                 } else if (HttpMethodType.POST.getValue() == request.getType()) {
                     res = HttpUtils.post(url.toString(), request.getPairs());
                 }
+
+                if (InvokeType.ASY == request.getInvokeType()) {
+                    request.setStatus(EXECUTING.getStatus()).setRemark(EXECUTING.getRemark());
+                    requestServiceDao.insertRequest(request);
+                } else {
+                    request.setStatus(FINISHING.getStatus()).setRemark(FINISHING.getRemark());
+                    requestServiceDao.insertRequest(request);
+                }
+
                 return JsonUtils.toObject(res, Response.class);
             } catch (Exception exp) {
+                log.error(exp.getMessage(), exp);
                 request.increaseReTimes();
             }
         }

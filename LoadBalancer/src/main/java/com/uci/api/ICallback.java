@@ -8,10 +8,7 @@ import com.uci.mode.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * when server finish executing asy task. It will call this restful api to update status of task information in DB
@@ -27,16 +24,18 @@ public class ICallback {
     private RequestServiceDao requestServiceDao;
 
     /**
-     * @param asyResponse
+     * @param id
+     * @param status
+     * @param remark
      * @return
      */
     @RequestMapping(path = "/callback", method = RequestMethod.POST)
-    public Response callback(@RequestBody AsyResponse asyResponse) {
+    public Response callback(@RequestParam Long id, @RequestParam Integer status, @RequestParam String remark) {
         try {
-            log.debug("callback receive asy response [" + asyResponse + " ]");
-            Request request = new Request().setStatus(asyResponse.getStatus()).setId(asyResponse.getId()).setRemark(asyResponse.getRemark());
+            log.info(String.format("receive data [id = %s, status=%s, remark=%s]", id, status, remark));
+            Request request = new Request().setStatus(status).setId(id).setRemark(remark);
             requestServiceDao.updateRequest(request);
-            if(asyResponse.getStatus() == 3){
+            if (status == 3) {
 
             }
             return Response.success(null);

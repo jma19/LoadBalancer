@@ -79,18 +79,26 @@ public class ServiceCacheTest {
         Arrays.sort(nums);
         int k = 0;
         int i = 0, j = 1, cnt = 0;
-        while(j < nums.length){
-            while(i <  j && nums[i] + k < nums[j]){
+        while (j < nums.length) {
+            while (i < j && nums[i] + k < nums[j]) {
                 i++;
             }
-            if(i != j && nums[i] + k == nums[j]){
+            if (i != j && nums[i] + k == nums[j]) {
                 cnt++;
             }
             j++;
-            while(j < nums.length && nums[j] == nums[j - 1]){
+            while (j < nums.length && nums[j] == nums[j - 1]) {
                 j++;
             }
         }
         System.out.println(cnt);
     }
+
+    private static String labelSyntax = "<[^<>\\\\]*>";
+
+    @Test
+    public void name1() throws Exception {
+        labelSyntax = "";
+    }
+
 }

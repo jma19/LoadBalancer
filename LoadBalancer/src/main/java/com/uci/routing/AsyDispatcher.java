@@ -1,5 +1,6 @@
 package com.uci.routing;
 
+import com.uci.dao.RequestServiceDao;
 import com.uci.mode.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class AsyDispatcher implements Runnable {
     @Autowired
     private ILoadBalancer balancer;
+
+
+    @Autowired
+    private RequestServiceDao requestServiceDao;
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<>();
 
@@ -34,6 +39,7 @@ public class AsyDispatcher implements Runnable {
                 request = queue.take();
                 balancer.distributeRequest(request);
             } catch (Exception e) {
+                e.printStackTrace();
                 if (request != null) {
                     queue.offer(request);
                 }
