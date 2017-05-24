@@ -30,12 +30,14 @@ public class DataBaseConfig {
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
+        //https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE
         log.debug("Configuring Datasource");
         //DruidDataSource可以配置
         DruidDataSource druidDataSource = new DruidDataSource();
+
         return druidDataSource;
     }
-    
+
     @Bean
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(dataSource());

@@ -14,9 +14,9 @@
         <result column="remark" property="remark"/>
     </resultMap>
 
-    <insert id="insertRequest" parameterType="com.uci.mode.Request" useGeneratedKeys="true">
+    <insert id="insertRequest" parameterType="com.uci.mode.Request" useGeneratedKeys="true" keyProperty="id">
         INSERT into tb_request (ip, port, type, path, params, retry_times, remark, status)
-   		value (#{ip},#{port}, #{type.value}, #{path},#{params},#{retry_times}, #{remark},#{status})
+   		value (#{ip},#{port}, #{type}, #{path},#{params},#{retry_times}, #{remark},#{status})
     </insert>
 
     <insert id="insertFailure" parameterType="com.uci.mode.FailureRequest">

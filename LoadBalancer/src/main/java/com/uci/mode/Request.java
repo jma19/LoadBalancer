@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Request {
     private Long id;
+    //request type
     private Integer type;
     private String ip;
     private Integer port;
@@ -30,7 +31,7 @@ public class Request {
         return this;
     }
 
-    public void increaseReTimes(){
+    public void increaseReTimes() {
         retryTimes++;
     }
 
@@ -87,7 +88,7 @@ public class Request {
         this.type = type;
         return this;
     }
-    
+
     public String getIp() {
         return ip;
     }
