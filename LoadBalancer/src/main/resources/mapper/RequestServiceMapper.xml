@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.uci.dao.RequestServiceDao">
-    <resultMap id="RequestMap" type="com.uci.mode.Request">
+
+    <resultMap id="RequestMapper" type="com.uci.mode.Request">
         <result column="id" property="id"/>
         <result column="ip" property="ip"/>
         <result column="port" property="port"/>
@@ -12,10 +13,11 @@
         <result column="params" property="params"/>
         <result column="retry_times" property="retryTimes"/>
         <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <insert id="insertRequest" parameterType="com.uci.mode.Request" useGeneratedKeys="true" keyProperty="id">
-        INSERT into tb_request (ip, port, type, path, params, retry_times, remark, status)
+        INSERT into tb_request (ip, port, type, path, params, retry_times, reark, status)
    		value (#{ip},#{port}, #{type}, #{path},#{params},#{retry_times}, #{remark},#{status})
     </insert>
 
@@ -23,8 +25,8 @@
         INSERT into tb_request_failure(request_id, ip, port, remark) value (#{requestId},#{ip}, #{port}, #{remark})
     </insert>
 
-    <select id="queryAllFinishRequest" parameterType="com.uci.mode.ServerInstance" resultMap="RequestMap">
-        SELECT  * from tb_request where ip = #{ip} and port = #{port} and status = 1
+    <select id="queryAllFinishRequest" parameterType="com.uci.mode.ServerInstance" resultMap="RequestMapper">
+        SELECT id, ip, port, type, path, params, retry_times, remark, status from tb_request where ip = #{ip} and port = #{port}
     </select>
 
     <update id="updateRequest" parameterType="com.uci.mode.Request">

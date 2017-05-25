@@ -1,16 +1,15 @@
 package com.uci.dao;
 
 import com.uci.ServerApplication;
-import com.uci.mode.HttpMethodType;
-import com.uci.mode.InvokeType;
-import com.uci.mode.Request;
-import com.uci.mode.RequestStatus;
+import com.uci.mode.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -52,6 +51,8 @@ public class RequestServiceDaoTest {
 
     @Test
     public void queryAllFinishRequest() throws Exception {
+        List<Request> requests = requestServiceDao.queryAllFinishRequest(new ServerInstance().setIp("192.168.1.1").setPort(8080));
+        System.out.println(requests);
 
     }
 
