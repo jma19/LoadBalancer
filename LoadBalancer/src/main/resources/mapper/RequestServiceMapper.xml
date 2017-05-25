@@ -16,9 +16,14 @@
         <result column="status" property="status"/>
     </resultMap>
 
-    <insert id="insertRequest" parameterType="com.uci.mode.Request" useGeneratedKeys="true" keyProperty="id">
-        INSERT into tb_request (ip, port, type, path, params, retry_times, reark, status)
-   		value (#{ip},#{port}, #{type}, #{path},#{params},#{retry_times}, #{remark},#{status})
+    <insert id="insertRequest" parameterType="com.uci.mode.Request">
+        INSERT into tb_request (ip, port, type, path, params, retry_times, remark, status)
+        value (#{ip},#{port}, #{type}, #{path},#{params},#{retryTimes}, #{remark}, #{status});
+
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID() as id
+        </selectKey>
+
     </insert>
 
     <insert id="insertFailure" parameterType="com.uci.mode.FailureRequest">

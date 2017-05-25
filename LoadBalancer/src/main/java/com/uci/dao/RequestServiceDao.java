@@ -17,7 +17,7 @@ public interface RequestServiceDao {
      * @param request
      * @return
      */
-    int insertRequest(Request request);
+    void insertRequest(Request request);
 
     /**
      * when loadbalancer fails to distribute a request, then create a failure record.

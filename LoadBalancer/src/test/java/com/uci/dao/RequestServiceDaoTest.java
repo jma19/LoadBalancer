@@ -35,8 +35,8 @@ public class RequestServiceDaoTest {
                 .setType(HttpMethodType.POST.getValue())
                 .setParams("{id: 2}")
                 .setRetryTimes(0);
-        int i = requestServiceDao.insertRequest(request);
-        System.out.println(i);
+        requestServiceDao.insertRequest(request);
+        System.out.println("request id = " + request.getId());
     }
 
     @Test
