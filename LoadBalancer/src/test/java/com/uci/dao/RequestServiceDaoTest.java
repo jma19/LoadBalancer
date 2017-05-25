@@ -46,7 +46,8 @@ public class RequestServiceDaoTest {
 
     @Test
     public void updateRequest() throws Exception {
-
+        Request request = new Request().setIp("1.1.1.1").setPort(9000).setId(10l).setRetryTimes(2).setStatus(RequestStatus.FAILED.getStatus()).setRemark(RequestStatus.FAILED.getRemark());
+        requestServiceDao.updateRequest(request);
     }
 
     @Test

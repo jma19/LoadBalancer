@@ -36,12 +36,14 @@
 
     <update id="updateRequest" parameterType="com.uci.mode.Request">
         update tb_request
-        <set>
-            <if test="ip!= null">ip=#{ip}</if>
-            <if test="port!= null">port=#{port}</if>
-            <if test="retryTimes!= null">retry_times=#{retryTimes}</if>
-            <if test="status!= null">ip=#{status}</if>
-        </set>
-    </update>
 
+        <set>
+            <if test="ip!= null">ip=#{ip},</if>
+            <if test="port!= null">port=#{port},</if>
+            <if test="retryTimes!= null">retry_times=#{retryTimes},</if>
+            <if test="remark!= null">remark=#{remark},</if>
+            <if test="status!= null">status=#{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

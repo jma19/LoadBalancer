@@ -5,7 +5,7 @@ package com.uci.mode;
  */
 public enum RequestStatus {
 
-    EXECUTING(1, "under executing "), FINISHING(2, "execute successfully");
+    EXECUTING(1, "under executing "), FINISHING(2, "execute successfully"), FAILED(3, "execute failed");
 
     private Integer status;
     private String remark;
