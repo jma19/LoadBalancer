@@ -3,31 +3,42 @@ package com.uci.routing;
 import com.uci.mode.Request;
 import com.uci.mode.Response;
 import com.uci.mode.ServerInstance;
+import org.springframework.core.PriorityOrdered;
 
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Created by junm5 on 5/24/17.
  */
-public class PriorityBalancer implements ILoadBalancer {
+public class PriorityBalancer extends AbstractLoadBalancer {
+
+    private PriorityQueue<ServerInstance> priorityQueue = new PriorityQueue<>();
+
 
     @Override
     public void reloadCache(List<ServerInstance> serverInstanceList) {
+        PriorityQueue<ServerInstance> origin = priorityQueue;
 
+        PriorityQueue<ServerInstance> tempQueue = new PriorityQueue<>();
+        tempQueue.addAll(serverInstanceList);
+        priorityQueue = tempQueue;
+        dispatchFailedServer(origin, priorityQueue);
     }
 
     @Override
     public boolean remove(ServerInstance server) {
-        return false;
+        return priorityQueue.remove(server);
     }
 
     @Override
     public ServerInstance getServer(int index) {
-        return null;
+        return priorityQueue.peek();
     }
 
     @Override
     public Response distributeRequest(Request request) {
+
         return null;
     }
 }

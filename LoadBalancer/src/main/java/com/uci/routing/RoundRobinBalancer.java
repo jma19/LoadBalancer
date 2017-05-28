@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,7 +21,7 @@ import static com.uci.mode.RequestStatus.FINISHING;
  * Created by junm5 on 4/25/17.
  */
 @Component
-public class RoundRobinBalancer implements ILoadBalancer {
+public class RoundRobinBalancer extends AbstractLoadBalancer {
 
     private final Logger log = LoggerFactory.getLogger(RoundRobinBalancer.class);
 
@@ -31,8 +32,6 @@ public class RoundRobinBalancer implements ILoadBalancer {
 
     protected List<ServerInstance> serverCache = new CopyOnWriteArrayList<>();
 
-    @Autowired
-    private AsyDispatcher asyDispatcher;
 
     public RoundRobinBalancer() {
         Thread thread = new Thread(asyDispatcher);
@@ -51,35 +50,7 @@ public class RoundRobinBalancer implements ILoadBalancer {
     public void reloadCache(List<ServerInstance> serverInstanceList) {
         List<ServerInstance> temp = serverCache;
         serverCache = new CopyOnWriteArrayList<>(serverInstanceList);
-        for (ServerInstance serverInstance : temp) {
-            if (!serverInstanceList.contains(serverInstance)) {
-                //获取所有调度到 这台机器上请求，然后将其调度到其他机器上, 数据库port要index
-                log.info("server down [" + serverInstance + "]");
-                List<Request> requests = requestServiceDao.queryAllFinishRequest(serverInstance);
-                for (Request request : requests) {
-                    ScheduleTask.submit(() -> {
-                                try {
-                                    requestServiceDao.insertFailure(getFailureRequest(request));
-                                    return true;
-                                } catch (Exception exp) {
-                                    log.error("invoke requestServiceDao.insertFailure fail", exp);
-                                    return false;
-                                }
-                            }
-                    );
-                }
-                asyDispatcher.add(requests);
-            }
-        }
-    }
-
-    private FailureRequest getFailureRequest(Request request) {
-        return new FailureRequest()
-                .setIp(request.getIp())
-                .setPath(request.getPath())
-                .setPort(request.getPort())
-                .setRemark("Server Down")
-                .setRequestId(request.getId());
+        dispatchFailedServer(serverInstanceList, temp);
     }
 
     @Override
@@ -98,26 +69,7 @@ public class RoundRobinBalancer implements ILoadBalancer {
         while ((curIndex = nextServerSlot()) != -1) {
             try {
                 ServerInstance server = getServer(curIndex);
-                StringBuffer url = buildPath(request, server);
-                String res = null;
-                if (HttpMethodType.GET.getValue() == request.getType()) {
-                    if (request.getParams() != null) {
-                        url.append("/" + request.getParams());
-                    }
-                    res = HttpUtils.get(url.toString());
-                } else if (HttpMethodType.POST.getValue() == request.getType()) {
-                    res = HttpUtils.post(url.toString(), request.getPairs());
-                }
-
-                if (InvokeType.ASY == request.getInvokeType()) {
-                    request.setStatus(EXECUTING.getStatus()).setRemark(EXECUTING.getRemark());
-                    requestServiceDao.insertRequest(request);
-                } else {
-                    request.setStatus(FINISHING.getStatus()).setRemark(FINISHING.getRemark());
-                    requestServiceDao.insertRequest(request);
-                }
-
-                return JsonUtils.toObject(res, Response.class);
+                return dispute(request, server);
             } catch (Exception exp) {
                 log.error(exp.getMessage(), exp);
                 request.increaseReTimes();
@@ -125,6 +77,7 @@ public class RoundRobinBalancer implements ILoadBalancer {
         }
         return Response.fail("No Server Available!");
     }
+
 
     private FailureRequest transform(Request request, Exception exp) {
         return new FailureRequest()
@@ -135,13 +88,5 @@ public class RoundRobinBalancer implements ILoadBalancer {
                 .setPath(request.getPath());
     }
 
-    private StringBuffer buildPath(Request request, ServerInstance serverInstance) {
-        return new StringBuffer()
-                .append("http://")
-                .append(serverInstance.getIp())
-                .append(":")
-                .append(serverInstance.getPort())
-                .append(request.getPath());
-    }
 }
 
