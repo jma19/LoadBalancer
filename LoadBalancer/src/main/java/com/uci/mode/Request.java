@@ -20,13 +20,13 @@ public class Request {
     private String remark;
     private String params;
     private List<NameValuePair> pairs;
-    private InvokeType invokeType;
+    private Integer invokeType;
 
-    public InvokeType getInvokeType() {
+    public Integer getInvokeType() {
         return invokeType;
     }
 
-    public Request setInvokeType(InvokeType invokeType) {
+    public Request setInvokeType(Integer invokeType) {
         this.invokeType = invokeType;
         return this;
     }

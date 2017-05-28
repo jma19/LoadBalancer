@@ -9,6 +9,7 @@
         <result column="ip" property="ip"/>
         <result column="port" property="port"/>
         <result column="type" property="type"/>
+        <result column="invoke_type" property="invokeType"/>
         <result column="path" property="path"/>
         <result column="params" property="params"/>
         <result column="retry_times" property="retryTimes"/>
@@ -17,8 +18,8 @@
     </resultMap>
 
     <insert id="insertRequest" parameterType="com.uci.mode.Request">
-        INSERT into tb_request (ip, port, type, path, params, retry_times, remark, status)
-        value (#{ip},#{port}, #{type}, #{path},#{params},#{retryTimes}, #{remark}, #{status});
+        INSERT into tb_request (ip, port, type, invoke_type, path, params, retry_times, remark, status)
+        value (#{ip},#{port}, #{type}, #{invokeType}, #{path},#{params},#{retryTimes}, #{remark}, #{status});
 
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID() as id
@@ -27,7 +28,7 @@
     </insert>
 
     <select id="queryRequest" parameterType="java.lang.Long">
-        select id, ip, port, type, path, params, retry_times, remark, status from tb_request
+        select id, ip, port, type, invoke_type, path, params, retry_times, remark, status from tb_request
         WHERE  id = #{id}
     </select>
 
@@ -36,7 +37,7 @@
     </insert>
 
     <select id="queryAllFinishRequest" parameterType="com.uci.mode.ServerInstance" resultMap="RequestMapper">
-        SELECT id, ip, port, type, path, params, retry_times, remark, status from tb_request where ip = #{ip} and port = #{port}
+        SELECT id, ip, port, type, invoke_type, path, params, retry_times, remark, status from tb_request where ip = #{ip} and port = #{port}
     </select>
 
     <update id="updateRequest" parameterType="com.uci.mode.Request">

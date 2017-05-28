@@ -34,7 +34,7 @@ public class LoadBalancerApi {
         Request request = new Request().setType(HttpMethodType.GET.getValue())
                 .setPath(queryPath)
                 .setParams("" + id)
-                .setInvokeType(InvokeType.SYN);
+                .setInvokeType(InvokeType.SYN.getValue());
 
         return iLoadBalancer.distributeRequest(request);
     }
@@ -45,7 +45,7 @@ public class LoadBalancerApi {
         Request request = new Request().setType(HttpMethodType.POST.getValue())
                 .setPath(postPath)
                 .setPairs(Lists.newArrayList(new BasicNameValuePair("id", "" + id)))
-                .setInvokeType(InvokeType.ASY);
+                .setInvokeType(InvokeType.ASY.getValue());
 
         return iLoadBalancer.distributeRequest(request);
     }

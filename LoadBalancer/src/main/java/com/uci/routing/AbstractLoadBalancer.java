@@ -64,7 +64,7 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
             res = HttpUtils.post(url.toString(), request.getPairs());
         }
 
-        if (InvokeType.ASY == request.getInvokeType()) {
+        if (InvokeType.ASY.getValue() == request.getInvokeType()) {
             request.setStatus(EXECUTING.getStatus()).setRemark(EXECUTING.getRemark());
             requestServiceDao.insertRequest(request);
         } else {
