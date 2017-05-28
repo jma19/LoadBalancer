@@ -3,6 +3,7 @@ package com.uci.dao;
 import com.uci.mode.FailureRequest;
 import com.uci.mode.Request;
 import com.uci.mode.ServerInstance;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,6 +19,14 @@ public interface RequestServiceDao {
      * @return
      */
     void insertRequest(Request request);
+
+    /**
+     * query request
+     *
+     * @param id
+     * @return
+     */
+    Request queryRequest(@Param("id") Long id);
 
     /**
      * when loadbalancer fails to distribute a request, then create a failure record.
@@ -40,7 +49,6 @@ public interface RequestServiceDao {
 
 
     /**
-     *
      * @param serverInstance
      * @return
      */

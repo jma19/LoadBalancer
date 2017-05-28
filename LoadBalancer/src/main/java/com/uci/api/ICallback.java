@@ -1,10 +1,10 @@
 package com.uci.api;
 
+import com.google.common.collect.Lists;
 import com.uci.conf.DataBaseConfig;
 import com.uci.dao.RequestServiceDao;
-import com.uci.mode.AsyResponse;
-import com.uci.mode.Request;
-import com.uci.mode.Response;
+import com.uci.mode.*;
+import com.uci.routing.AsyDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,9 @@ public class ICallback {
     @Autowired
     private RequestServiceDao requestServiceDao;
 
+    @Autowired
+    private AsyDispatcher asyDispatcher;
+
     /**
      * @param id
      * @param status
@@ -35,14 +38,26 @@ public class ICallback {
             log.info(String.format("receive data [id = %s, status=%s, remark=%s]", id, status, remark));
             Request request = new Request().setStatus(status).setId(id).setRemark(remark);
             requestServiceDao.updateRequest(request);
-            if (status == 3) {
-
+            if (status == RequestStatus.FAILED.getStatus()) {
+                Request newRequest = requestServiceDao.queryRequest(request.getId());
+                requestServiceDao.insertFailure(getFailureRequest(newRequest, remark));
+                asyDispatcher.add(Lists.newArrayList(newRequest));
             }
             return Response.success(null);
         } catch (Exception exp) {
             log.error(exp.getMessage(), exp);
             return Response.fail("Server Inner Error, DB operation!!");
         }
+    }
+
+    private FailureRequest getFailureRequest(Request request, String remark) {
+        return new FailureRequest()
+                .setPort(request.getPort())
+                .setRemark(remark)
+                .setPath(request.getPath())
+                .setIp(request.getIp())
+                .setRequestId(request.getId());
+
     }
 
 }

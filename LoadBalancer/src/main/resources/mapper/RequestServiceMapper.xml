@@ -26,6 +26,11 @@
 
     </insert>
 
+    <select id="queryRequest" parameterType="java.lang.Long">
+        select id, ip, port, type, path, params, retry_times, remark, status from tb_request
+        WHERE  id = #{id}
+    </select>
+
     <insert id="insertFailure" parameterType="com.uci.mode.FailureRequest">
         INSERT into tb_request_failure(request_id, ip, port, remark) value (#{requestId},#{ip}, #{port}, #{remark})
     </insert>
