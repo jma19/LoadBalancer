@@ -18,9 +18,6 @@ public class AsyDispatcher implements Runnable {
     private ILoadBalancer balancer;
 
 
-    @Autowired
-    private RequestServiceDao requestServiceDao;
-
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<>();
 
     public void add(List<Request> requests) {
