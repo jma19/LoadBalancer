@@ -41,7 +41,8 @@ public class PriorityBalancer extends AbstractLoadBalancer {
     public Response distributeRequest(Request request) {
         ServerInstance serverInstance = priorityQueue.peek();
         try {
-            return dispute(request, serverInstance);
+            request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp()).setRetryTimes(0);
+            return dispute(request);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (LBException e) {
