@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ public class HttpUtils {
      */
     private final String EMPTY = "";
 
-    public static String post(String url, List<NameValuePair> params) throws IOException {
+    public static String post(String url, List<BasicNameValuePair> params) throws IOException {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(url);
         try {

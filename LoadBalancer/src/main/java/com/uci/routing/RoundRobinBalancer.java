@@ -34,12 +34,6 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
 
     protected List<ServerInstance> serverCache = new CopyOnWriteArrayList<>();
 
-    @PostConstruct
-    private void init() {
-        Thread thread = new Thread(asyDispatcher);
-        thread.start();
-    }
-
 
     // get the next slot by using the using round-robin approach
     private synchronized int nextServerSlot() {

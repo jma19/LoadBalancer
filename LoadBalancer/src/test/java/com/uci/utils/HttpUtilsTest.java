@@ -21,7 +21,7 @@ public class HttpUtilsTest {
     @Test
     public void test_post_method_using_parameters() throws Exception {
         // HttpUtils.post();
-        List<NameValuePair> nameValuePairs = Lists.newArrayList(new BasicNameValuePair("id", "1"));
+        List<BasicNameValuePair> nameValuePairs = Lists.newArrayList(new BasicNameValuePair("id", "1"));
         String response = HttpUtils.post("http://localhost:8001/post", nameValuePairs);
         System.out.println(response);
     }

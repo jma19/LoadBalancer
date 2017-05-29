@@ -1,6 +1,7 @@
 package com.uci.mode;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Request {
     //json style
     private String remark;
     private String params;
-    private List<NameValuePair> pairs;
+    private List<BasicNameValuePair> pairs;
     private Integer invokeType;
 
     public Integer getInvokeType() {
@@ -35,11 +36,11 @@ public class Request {
         retryTimes++;
     }
 
-    public List<NameValuePair> getPairs() {
+    public List<BasicNameValuePair> getPairs() {
         return pairs;
     }
 
-    public Request setPairs(List<NameValuePair> pairs) {
+    public Request setPairs(List<BasicNameValuePair> pairs) {
         this.pairs = pairs;
         return this;
     }
