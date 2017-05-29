@@ -1,10 +1,7 @@
 package com.uci.api;
 
 import com.google.common.collect.Lists;
-import com.uci.mode.HttpMethodType;
-import com.uci.mode.InvokeType;
-import com.uci.mode.Request;
-import com.uci.mode.Response;
+import com.uci.mode.*;
 import com.uci.routing.ILoadBalancer;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,11 @@ public class LoadBalancerApi {
                 .setParams("" + id)
                 .setInvokeType(InvokeType.SYN.getValue());
 
-        return iLoadBalancer.distributeRequest(request);
+        try {
+            return iLoadBalancer.distributeRequest(request);
+        } catch (LBException e) {
+            return Response.fail(e.getMessage());
+        }
     }
 
     @RequestMapping(path = "/post", method = RequestMethod.POST)
@@ -47,7 +48,11 @@ public class LoadBalancerApi {
                 .setPairs(Lists.newArrayList(new BasicNameValuePair("id", "" + id)))
                 .setInvokeType(InvokeType.ASY.getValue());
 
-        return iLoadBalancer.distributeRequest(request);
+        try {
+            return iLoadBalancer.distributeRequest(request);
+        } catch (LBException e) {
+            return Response.fail(e.getMessage());
+        }
     }
 
 

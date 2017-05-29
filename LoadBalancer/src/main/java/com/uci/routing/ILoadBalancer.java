@@ -1,5 +1,6 @@
 package com.uci.routing;
 
+import com.uci.mode.LBException;
 import com.uci.mode.Request;
 import com.uci.mode.Response;
 import com.uci.mode.ServerInstance;
@@ -17,6 +18,6 @@ public interface ILoadBalancer {
 
     ServerInstance getServer(int index);
 
-    Response distributeRequest(Request request);
+    Response distributeRequest(Request request) throws LBException;
 }
 

@@ -7,4 +7,6 @@ import com.uci.mode.LBException;
  */
 public interface ConstantException {
     LBException TIME_OUT_EXCEPTION = new LBException("TIME_OUT");
+
+    LBException NO_SERVER_AVAILABLE = new LBException("No Server Available!");
 }

@@ -1,5 +1,6 @@
 package com.uci.routing;
 
+import com.uci.common.ConstantException;
 import com.uci.dao.RequestServiceDao;
 import com.uci.mode.*;
 import com.uci.utils.HttpUtils;
@@ -61,7 +62,7 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
     }
 
     @Override
-    public Response distributeRequest(Request request) {
+    public Response distributeRequest(Request request) throws LBException {
         int curIndex;
         while ((curIndex = nextServerSlot()) != -1) {
             try {
@@ -85,7 +86,7 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
             }
         }
         log.info("No Server Available");
-        return Response.fail("No Server Available!");
+        throw ConstantException.NO_SERVER_AVAILABLE;
     }
 
 
