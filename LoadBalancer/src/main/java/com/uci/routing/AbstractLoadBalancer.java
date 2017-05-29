@@ -55,8 +55,8 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
         }
     }
 
-    protected Response dispute(Request request, ServerInstance server) throws IOException, LBException {
-        StringBuffer url = buildPath(request, server);
+    protected Response dispute(Request request) throws IOException, LBException {
+        StringBuffer url = buildPath(request);
         String res = null;
         if (HttpMethodType.GET.getValue() == request.getType()) {
             if (request.getParams() != null) {
@@ -84,12 +84,12 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
         return JsonUtils.toObject(res, Response.class);
     }
 
-    private StringBuffer buildPath(Request request, ServerInstance serverInstance) {
+    private StringBuffer buildPath(Request request) {
         return new StringBuffer()
                 .append("http://")
-                .append(serverInstance.getIp())
+                .append(request.getIp())
                 .append(":")
-                .append(serverInstance.getPort())
+                .append(request.getPort())
                 .append(request.getPath());
     }
 

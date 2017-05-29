@@ -69,7 +69,8 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
         while ((curIndex = nextServerSlot()) != -1) {
             try {
                 ServerInstance server = getServer(curIndex);
-                return dispute(request, server);
+                request.setIp(server.getIp()).setPort(server.getPort());
+                return dispute(request);
             } catch (Exception exp) {
                 log.error(exp.getMessage(), exp);
                 request.increaseReTimes();

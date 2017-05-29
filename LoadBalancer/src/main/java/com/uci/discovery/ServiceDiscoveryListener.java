@@ -92,9 +92,7 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
                     return;
                 }
                 pre = serverInstances;
-                log.info("cache change, server size:" + serverInstances.size());
-                System.out.println("server instance size is " + serverInstances.size());
-                System.out.println(serverInstances);
+                log.info("cache change, server size:" + serverInstances.size() + "," + serverInstances);
                 iLoadBalancer.reloadCache(serverInstances);
             } else {
                 log.info("cache is empty, no server exists");
