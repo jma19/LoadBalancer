@@ -1,14 +1,15 @@
 package com.uci.routing;
 
-import com.uci.mode.LBException;
-import com.uci.mode.Request;
-import com.uci.mode.Response;
-import com.uci.mode.ServerInstance;
+import com.uci.mode.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.PriorityOrdered;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import static com.uci.mode.RequestStatus.FAILED;
 
 /**
  * Created by junm5 on 5/24/17.
@@ -16,6 +17,7 @@ import java.util.PriorityQueue;
 public class PriorityBalancer extends AbstractLoadBalancer {
 
     private PriorityQueue<ServerInstance> priorityQueue = new PriorityQueue<>();
+    private final Logger log = LoggerFactory.getLogger(PriorityBalancer.class);
 
 
     @Override
@@ -40,13 +42,32 @@ public class PriorityBalancer extends AbstractLoadBalancer {
     @Override
     public Response distributeRequest(Request request) {
         ServerInstance serverInstance = priorityQueue.peek();
+        if (serverInstance == null) {
+            return Response.fail("No Server available!!");
+        }
+
         try {
             request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp()).setRetryTimes(0);
-            return dispute(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (LBException e) {
-            e.printStackTrace();
+            Response response = dispute(request);
+            ServerInstance temp = response.getServerInstance().setIp(serverInstance.getIp()).setPort(serverInstance.getPort());
+            priorityQueue.remove(serverInstance);
+            priorityQueue.offer(temp);
+            return response;
+        } catch (Exception exp) {
+            log.error(exp.getMessage(), exp);
+            request.increaseReTimes();
+            if (InvokeType.ASY.getValue() == request.getInvokeType()) {
+                request.setRemark(exp.getMessage()).setStatus(FAILED.getStatus());
+                requestServiceDao.updateRequest(request);
+                requestServiceDao.insertFailure(getFailureRequest(request));
+
+            } else {
+                if (request.getRetryTimes() == 20) {
+                    log.error("distribute failed, over distribute time limit!!");
+                    return Response.fail("Syn Request, distribute failed!! distribute time > " + LIMIT_TIMES);
+                }
+            }
+            distributeRequest(request);
         }
         return null;
     }
