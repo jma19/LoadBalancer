@@ -35,7 +35,7 @@ public class ICallback {
     @RequestMapping(path = "/callback", method = RequestMethod.POST)
     public Response callback(@RequestParam Long id, @RequestParam Integer status, @RequestParam String remark) {
         try {
-            log.info(String.format("receive data [id = %s, status=%s, remark=%s]", id, status, remark));
+            log.info(String.format("callback receive data [id = %s, status=%s, remark=%s]", id, status, remark));
             Request request = new Request().setStatus(status).setId(id).setRemark(remark);
             requestServiceDao.updateRequest(request);
             if (status == RequestStatus.FAILED.getStatus()) {

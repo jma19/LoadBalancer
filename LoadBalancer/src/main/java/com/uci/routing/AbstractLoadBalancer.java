@@ -18,7 +18,6 @@ import static com.uci.mode.HttpMethodType.GET;
 import static com.uci.mode.HttpMethodType.POST;
 import static com.uci.mode.InvokeType.ASY;
 import static com.uci.mode.RequestStatus.EXECUTING;
-import static com.uci.mode.RequestStatus.FINISHING;
 
 /**
  * Created by junm5 on 5/27/17.
@@ -41,11 +40,13 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
                 log.info("server down [" + serverInstance + "]");
                 List<Request> requests = requestServiceDao.queryAllFinishRequest(serverInstance);
                 if (requests == null || requests.isEmpty()) {
+                    log.info("no under executing task on machine " + serverInstance);
                     return;
                 }
                 for (Request request : requests) {
                     ScheduleTask.submit(() -> {
                                 try {
+                                    request.setRemark("Server Down");
                                     requestServiceDao.insertFailure(getFailureRequest(request));
                                     return true;
                                 } catch (Exception exp) {

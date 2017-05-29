@@ -4,10 +4,11 @@ import com.google.gson.reflect.TypeToken;
 import com.uci.mode.Request;
 import com.uci.utils.JsonUtils;
 import org.apache.http.NameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,10 +21,13 @@ public class AsyDispatcher implements Runnable {
     @Autowired
     private ILoadBalancer balancer;
 
+    private final Logger log = LoggerFactory.getLogger(AsyDispatcher.class);
+
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<>();
 
     public void add(List<Request> requests) {
+        log.info("asy dispatcher add requests size = " + requests.size());
         if (requests != null && !requests.isEmpty()) {
             for (Request request : requests) {
                 queue.offer(request);
@@ -37,8 +41,10 @@ public class AsyDispatcher implements Runnable {
             Request request = null;
             try {
                 request = queue.take();
+                log.info("asy dispatcher consume " + request);
                 String params = request.getParams();
-                JsonUtils.fromJson(params, new TypeToken<List<NameValuePair>>() {});
+                JsonUtils.fromJson(params, new TypeToken<List<NameValuePair>>() {
+                });
                 balancer.distributeRequest(request);
             } catch (Exception e) {
                 e.printStackTrace();
