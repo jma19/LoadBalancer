@@ -23,7 +23,6 @@ public class AsyDispatcher implements Runnable {
 
     private final Logger log = LoggerFactory.getLogger(AsyDispatcher.class);
 
-
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<>();
 
     public void add(List<Request> requests) {
@@ -38,13 +37,15 @@ public class AsyDispatcher implements Runnable {
     @Override
     public void run() {
         while (true) {
+            System.out.println("启动AsyDispatcher线程");
             Request request = null;
             try {
                 request = queue.take();
                 log.info("asy dispatcher consume " + request);
                 String params = request.getParams();
-                JsonUtils.fromJson(params, new TypeToken<List<NameValuePair>>() {
+                List<NameValuePair> nameValuePairs = JsonUtils.fromJson(params, new TypeToken<List<NameValuePair>>() {
                 });
+                request.setPairs(nameValuePairs);
                 balancer.distributeRequest(request);
             } catch (Exception e) {
                 e.printStackTrace();

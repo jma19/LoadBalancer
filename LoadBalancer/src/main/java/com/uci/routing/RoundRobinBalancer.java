@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,11 +34,12 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
 
     protected List<ServerInstance> serverCache = new CopyOnWriteArrayList<>();
 
-
-    public RoundRobinBalancer() {
+    @PostConstruct
+    private void init() {
         Thread thread = new Thread(asyDispatcher);
         thread.start();
     }
+
 
     // get the next slot by using the using round-robin approach
     private synchronized int nextServerSlot() {
