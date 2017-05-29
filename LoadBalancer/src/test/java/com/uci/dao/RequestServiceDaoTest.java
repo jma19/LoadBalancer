@@ -11,8 +11,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by junm5 on 5/23/17.
  */
@@ -52,7 +50,7 @@ public class RequestServiceDaoTest {
 
     @Test
     public void queryAllFinishRequest() throws Exception {
-        List<Request> requests = requestServiceDao.queryAllFinishRequest(new ServerInstance().setIp("192.168.1.1").setPort(8080));
+        List<Request> requests = requestServiceDao.queryAllUnderExRequest(new ServerInstance().setIp("192.168.1.1").setPort(8080));
         System.out.println(requests);
 
     }

@@ -3,7 +3,6 @@ package com.uci.routing;
 import com.google.gson.reflect.TypeToken;
 import com.uci.mode.Request;
 import com.uci.utils.JsonUtils;
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +47,15 @@ public class AsyDispatcher implements Runnable {
                 request.setPairs(nameValuePairs);
                 balancer.distributeRequest(request);
             } catch (Exception e) {
-                e.printStackTrace();
-                if (request != null) {
-                    queue.offer(request);
+                try {
+                    Thread.sleep(2000);
+                    if (request != null) {
+                        queue.offer(request);
+                    }
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
                 }
+
             }
         }
     }

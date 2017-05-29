@@ -36,8 +36,9 @@
         INSERT into tb_request_failure(request_id, ip, port, remark) value (#{requestId},#{ip}, #{port}, #{remark})
     </insert>
 
-    <select id="queryAllFinishRequest" parameterType="com.uci.mode.ServerInstance" resultMap="RequestMapper">
-        SELECT id, ip, port, type, invoke_type, path, params, retry_times, remark, status from tb_request where ip = #{ip} and port = #{port}
+    <select id="queryAllUnderExRequest" parameterType="com.uci.mode.ServerInstance" resultMap="RequestMapper">
+        SELECT id, ip, port, type, invoke_type, path, params, retry_times, remark, status from tb_request where ip = #{ip}
+        and port = #{port} and status = 1
     </select>
 
     <update id="updateRequest" parameterType="com.uci.mode.Request">

@@ -78,8 +78,9 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     @Override
     public void cacheChanged() {
         try {
-            List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
+            log.info("call cacheChanged!!!");
 
+            List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
 
             if (serviceInstances != null && !serviceInstances.isEmpty()) {
 

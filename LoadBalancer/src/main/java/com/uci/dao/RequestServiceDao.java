@@ -52,7 +52,7 @@ public interface RequestServiceDao {
      * @param serverInstance
      * @return
      */
-    List<Request> queryAllFinishRequest(ServerInstance serverInstance);
+    List<Request> queryAllUnderExRequest(ServerInstance serverInstance);
 
 }
 
