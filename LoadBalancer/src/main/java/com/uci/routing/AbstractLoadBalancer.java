@@ -65,8 +65,14 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
         }
 
         if (InvokeType.ASY.getValue() == request.getInvokeType()) {
-            request.setStatus(EXECUTING.getStatus()).setRemark(EXECUTING.getRemark());
-            requestServiceDao.insertRequest(request);
+            //redistribute the request
+            if (request.getId() != null) {
+                request.setRetryTimes(request.getRetryTimes() + 1);
+            } else {
+                String params = JsonUtils.toJson(request.getPairs());
+                request.setStatus(EXECUTING.getStatus()).setRemark(EXECUTING.getRemark()).setParams(params);
+                requestServiceDao.insertRequest(request);
+            }
         } else {
             request.setStatus(FINISHING.getStatus()).setRemark(FINISHING.getRemark());
             requestServiceDao.insertRequest(request);

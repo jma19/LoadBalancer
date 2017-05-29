@@ -1,10 +1,13 @@
 package com.uci.routing;
 
-import com.uci.dao.RequestServiceDao;
+import com.google.gson.reflect.TypeToken;
 import com.uci.mode.Request;
+import com.uci.utils.JsonUtils;
+import org.apache.http.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -34,6 +37,8 @@ public class AsyDispatcher implements Runnable {
             Request request = null;
             try {
                 request = queue.take();
+                String params = request.getParams();
+                JsonUtils.fromJson(params, new TypeToken<List<NameValuePair>>() {});
                 balancer.distributeRequest(request);
             } catch (Exception e) {
                 e.printStackTrace();

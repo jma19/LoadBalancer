@@ -21,11 +21,10 @@ public class PriorityBalancer extends AbstractLoadBalancer {
     @Override
     public void reloadCache(List<ServerInstance> serverInstanceList) {
         PriorityQueue<ServerInstance> origin = priorityQueue;
-
         PriorityQueue<ServerInstance> tempQueue = new PriorityQueue<>();
         tempQueue.addAll(serverInstanceList);
         priorityQueue = tempQueue;
-        dispatchFailedServer(origin, priorityQueue);
+        dispatchFailedServer(priorityQueue, origin);
     }
 
     @Override

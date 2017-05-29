@@ -2,6 +2,7 @@ package com.uci.utils;
 
 import com.google.api.client.testing.json.AbstractJsonParserTest;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.Arrays;
 
@@ -21,4 +22,9 @@ public class JsonUtils {
         }
         return gson.fromJson(json, clas);
     }
+
+    public static <T> T fromJson(String json, TypeToken<T> type) {
+        return gson.fromJson(json, type.getType());
+    }
+
 }
