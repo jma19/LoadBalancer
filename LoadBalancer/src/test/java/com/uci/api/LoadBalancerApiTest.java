@@ -31,7 +31,8 @@ public class LoadBalancerApiTest {
 
     @Test
     public void should_push_asy() throws Exception {
-
+        Response query = loadBalancerApi.queryAsy(1);
+        System.out.println(query);
 
     }
 }

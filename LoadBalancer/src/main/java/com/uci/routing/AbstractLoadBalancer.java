@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.uci.mode.HttpMethodType.GET;
+import static com.uci.mode.HttpMethodType.POST;
 import static com.uci.mode.InvokeType.ASY;
 import static com.uci.mode.RequestStatus.EXECUTING;
 import static com.uci.mode.RequestStatus.FINISHING;
@@ -62,14 +63,6 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
         StringBuffer url = buildPath(request);
         String res = null;
 
-        if (GET.getValue() == request.getType()) {
-            if (request.getParams() != null) {
-                url.append("/").append(request.getParams());
-            }
-            res = HttpUtils.get(url.toString());
-//            request.setStatus(FINISHING.getStatus()).setRemark(FINISHING.getRemark());
-//            requestServiceDao.insertRequest(request);
-        }
         if (ASY.getValue() == request.getInvokeType()) {
             if (request.getId() != null) {
                 request.setRetryTimes(request.getRetryTimes() + 1);
@@ -80,6 +73,15 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
             }
             request.getPairs().add(new BasicNameValuePair("requestId", request.getId() + ""));
             res = HttpUtils.post(url.toString(), request.getPairs());
+        } else {
+            if (GET.getValue() == request.getType()) {
+                if (request.getParams() != null) {
+                    url.append("/").append(request.getParams());
+                }
+                res = HttpUtils.get(url.toString());
+            } else if (POST.getValue() == request.getType()) {
+                res = HttpUtils.post(url.toString(), request.getPairs());
+            }
         }
         return JsonUtils.toObject(res, Response.class);
     }
