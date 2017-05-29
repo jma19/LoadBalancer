@@ -25,6 +25,7 @@ import static com.uci.mode.RequestStatus.FINISHING;
  */
 public abstract class AbstractLoadBalancer implements ILoadBalancer {
 
+    protected final static int LIMIT_TIMES = 20;
     private final Logger log = LoggerFactory.getLogger(RoundRobinBalancer.class);
 
     @Autowired
@@ -96,12 +97,12 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
     }
 
 
-    private FailureRequest getFailureRequest(Request request) {
+    protected FailureRequest getFailureRequest(Request request) {
         return new FailureRequest()
                 .setIp(request.getIp())
                 .setPath(request.getPath())
                 .setPort(request.getPort())
-                .setRemark("Server Down")
+                .setRemark(request.getRemark())
                 .setRequestId(request.getId());
     }
 

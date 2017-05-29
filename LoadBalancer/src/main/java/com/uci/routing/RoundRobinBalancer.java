@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.uci.mode.RequestStatus.EXECUTING;
+import static com.uci.mode.RequestStatus.FAILED;
 import static com.uci.mode.RequestStatus.FINISHING;
 
 /**
@@ -74,6 +75,17 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
             } catch (Exception exp) {
                 log.error(exp.getMessage(), exp);
                 request.increaseReTimes();
+
+                if (request.getInvokeType() == InvokeType.ASY.getValue()) {
+                    request.setRemark(exp.getMessage()).setStatus(FAILED.getStatus());
+                    requestServiceDao.updateRequest(request);
+                    requestServiceDao.insertFailure(getFailureRequest(request));
+                } else {
+                    if (request.getRetryTimes() == 20) {
+                        log.error("distribute failed, over distribute time limit!!");
+                        return Response.fail("Syn Request, distribute failed!! distribute time > " + LIMIT_TIMES);
+                    }
+                }
             }
         }
         log.info("No Server Available");
