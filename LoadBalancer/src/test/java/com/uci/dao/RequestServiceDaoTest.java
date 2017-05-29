@@ -31,7 +31,7 @@ public class RequestServiceDaoTest {
                 .setPath("/query")
                 .setStatus(RequestStatus.FINISHING.getStatus())
                 .setRemark(RequestStatus.FINISHING.getRemark())
-                .setInvokeType(InvokeType.SYN)
+                .setInvokeType(InvokeType.SYN.getValue())
                 .setType(HttpMethodType.POST.getValue())
                 .setParams("{id: 2}")
                 .setRetryTimes(0);

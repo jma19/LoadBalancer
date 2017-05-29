@@ -35,6 +35,9 @@ public abstract class AbstractLoadBalancer implements ILoadBalancer {
                 //获取所有调度到 这台机器上请求，然后将其调度到其他机器上, 数据库port要index
                 log.info("server down [" + serverInstance + "]");
                 List<Request> requests = requestServiceDao.queryAllFinishRequest(serverInstance);
+                if (requests == null || requests.isEmpty()) {
+                    return;
+                }
                 for (Request request : requests) {
                     ScheduleTask.submit(() -> {
                                 try {

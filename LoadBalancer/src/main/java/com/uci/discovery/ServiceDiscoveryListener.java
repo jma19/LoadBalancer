@@ -1,6 +1,7 @@
 package com.uci.discovery;
 
 import com.google.common.collect.Lists;
+import com.uci.conf.DataBaseConfig;
 import com.uci.mode.InstanceDetails;
 import com.uci.mode.ServerInstance;
 import com.uci.routing.ILoadBalancer;
@@ -16,6 +17,8 @@ import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.apache.curator.x.discovery.details.ServiceCacheListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ServiceDiscoveryListener implements ServiceCacheListener {
+    private final Logger log = LoggerFactory.getLogger(ServiceDiscoveryListener.class);
 
     private static final String PATH = "/discovery";
     private RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
@@ -69,18 +73,33 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         CloseableUtils.closeQuietly(client);
     }
 
+    private List<ServerInstance> pre = null;
+
     @Override
     public void cacheChanged() {
-        System.out.println("cacheChanged");
         try {
             List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
+
+
             if (serviceInstances != null && !serviceInstances.isEmpty()) {
+
                 List<ServerInstance> serverInstances = serviceInstances.stream()
                         .map(serviceInstance -> getServerInstance(serviceInstance))
                         .collect(Collectors.toList());
+
+                if (pre != null && pre.equals(serverInstances)) {
+                    log.info("cache does't change");
+                    return;
+                }
+                pre = serverInstances;
+                log.info("cache change, server size:" + serverInstances.size());
                 System.out.println("server instance size is " + serverInstances.size());
                 System.out.println(serverInstances);
                 iLoadBalancer.reloadCache(serverInstances);
+            } else {
+                log.info("cache is empty, no server exists");
+                pre = Lists.newArrayList();
+                iLoadBalancer.reloadCache(Lists.newArrayList());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,8 +107,13 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     }
 
     private ServerInstance getServerInstance(ServiceInstance<InstanceDetails> serviceInstance) {
-        return new ServerInstance().setPort(serviceInstance.getPort())
-                .setIp(serviceInstance.getAddress());
+        InstanceDetails payload = serviceInstance.getPayload();
+
+        return new ServerInstance()
+                .setPort(serviceInstance.getPort())
+                .setIp(serviceInstance.getAddress())
+                .setAvailableProcessor(payload.getAvailableProcessor())
+                .setFreeMemory(payload.getFreeMemory());
     }
 
     @Override
