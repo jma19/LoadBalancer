@@ -76,18 +76,10 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
                 request.increaseReTimes();
             }
         }
+        log.info("No Server Available");
         return Response.fail("No Server Available!");
     }
 
-
-    private FailureRequest transform(Request request, Exception exp) {
-        return new FailureRequest()
-                .setRemark(exp.getMessage())
-                .setRequestId(request.getId())
-                .setIp(request.getIp())
-                .setPort(request.getPort())
-                .setPath(request.getPath());
-    }
 
 }
 
