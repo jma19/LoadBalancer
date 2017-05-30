@@ -29,6 +29,7 @@ CREATE TABLE `tb_request` (
     `ip` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'ip address',
     `port` INT(11) NOT NULL  COMMENT 'port number',
     `type` tinyint(4) NOT NULL  COMMENT 'request type',
+    `invoke_type` tinyint(4) NOT NULL  COMMENT 'invoke type',
     `path` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'request url path',
     `params` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'request params json string',
     `retry_times` int(11) NOT NULL DEFAULT 1 COMMENT 'retry times for a request',
@@ -38,6 +39,7 @@ CREATE TABLE `tb_request` (
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated time',
     PRIMARY KEY (`id`),
     KEY `ix_ip` (`ip`),
+    KEY `ix_port` (`port`),
     KEY `ix_created_at` (`created_at`),
     KEY `ix_updated_at` (`updated_at`)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request info';
@@ -61,3 +63,7 @@ CREATE TABLE `tb_request_failure` (
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='request failure history';
 
 ~~~
+
+
+Test case:
+
