@@ -25,14 +25,8 @@ import static org.apache.http.HttpHeaders.USER_AGENT;
  * Created by junm5 on 4/25/17.
  */
 public class HttpUtils {
-    /**
-     * call post
-     *
-     * @return
-     */
-    private final String EMPTY = "";
 
-    public static String post(String url, List<BasicNameValuePair> params) throws IOException {
+    public static String post(String url, List<BasicNameValuePair> params) throws LBException {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(url);
         try {
@@ -41,14 +35,15 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             return EntityUtils.toString(entity, "utf-8");
         } catch (Exception exp) {
-            throw exp;
+            exp.printStackTrace();
+            throw new LBException(exp.getMessage());
         } finally {
             httppost.releaseConnection();
         }
     }
 
 
-    public static String get(String url) throws IOException, LBException {
+    public static String get(String url) throws LBException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
         request.addHeader("User-Agent", USER_AGENT);
@@ -57,10 +52,13 @@ public class HttpUtils {
             if (response.getStatusLine().getStatusCode() == 200) {
                 return getStringResponse(response);
             }
-            throw new LBException("");
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            throw new LBException(exp.getMessage());
         } finally {
             request.releaseConnection();
         }
+        return null;
     }
 
     private static String getStringResponse(HttpResponse httpResponse) throws IOException {
