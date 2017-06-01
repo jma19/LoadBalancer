@@ -39,8 +39,8 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     private RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
 
     private CuratorFramework client = null;
-    private ServiceDiscovery<InstanceDetails> serviceDiscovery = null;
-    private ServiceCache<InstanceDetails> serviceCache;
+    private ServiceDiscovery<com.uci.mode.ServerInstance> serviceDiscovery = null;
+    private ServiceCache<com.uci.mode.ServerInstance> serviceCache;
     private static final String CACHE_NAME = "TIPPER";
 
     private static final String connection = "localhost:2181";
@@ -51,8 +51,8 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     @PostConstruct
     public void init() throws Exception {
         client = CuratorFrameworkFactory.newClient(connection, retryPolicy);
-        JsonInstanceSerializer<InstanceDetails> serializer = new JsonInstanceSerializer<>(InstanceDetails.class);
-        serviceDiscovery = ServiceDiscoveryBuilder.builder(InstanceDetails.class).client(client).basePath(PATH).serializer(serializer).build();
+        JsonInstanceSerializer<com.uci.mode.ServerInstance> serializer = new JsonInstanceSerializer<>(com.uci.mode.ServerInstance.class);
+        serviceDiscovery = ServiceDiscoveryBuilder.builder(com.uci.mode.ServerInstance.class).client(client).basePath(PATH).serializer(serializer).build();
         serviceCache = serviceDiscovery.serviceCacheBuilder().name(CACHE_NAME).build();
         serviceCache.addListener(this);
 
@@ -61,8 +61,8 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         serviceCache.start();
     }
 
-    private List<ServiceInstance<InstanceDetails>> queryAllServiceInstance(String cacheName) throws Exception {
-        Collection<ServiceInstance<InstanceDetails>> instances = serviceDiscovery.queryForInstances(cacheName);
+    private List<ServiceInstance<com.uci.mode.ServerInstance>> queryAllServiceInstance(String cacheName) throws Exception {
+        Collection<ServiceInstance<com.uci.mode.ServerInstance>> instances = serviceDiscovery.queryForInstances(cacheName);
         return Lists.newArrayList(instances);
     }
 
@@ -80,7 +80,7 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         try {
             log.info("call cacheChanged!!!");
 
-            List<ServiceInstance<InstanceDetails>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
+            List<ServiceInstance<com.uci.mode.ServerInstance>> serviceInstances = queryAllServiceInstance(CACHE_NAME);
 
             if (serviceInstances != null && !serviceInstances.isEmpty()) {
 
@@ -105,12 +105,12 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
         }
     }
 
-    private ServerInstance getServerInstance(ServiceInstance<InstanceDetails> serviceInstance) {
-        InstanceDetails payload = serviceInstance.getPayload();
+    private ServerInstance getServerInstance(ServiceInstance<com.uci.mode.ServerInstance> serviceInstance) {
+        com.uci.mode.ServerInstance payload = serviceInstance.getPayload();
 
         return new ServerInstance()
-                .setPort(serviceInstance.getPort())
-                .setIp(serviceInstance.getAddress())
+                .setPort(payload.getPort())
+                .setIp(payload.getIp())
                 .setAvailableProcessor(payload.getAvailableProcessor())
                 .setFreeMemory(payload.getFreeMemory());
     }
