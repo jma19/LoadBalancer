@@ -55,4 +55,11 @@ public class RequestServiceDaoTest {
 
     }
 
+    @Test
+    public void select() throws Exception {
+        Request request = requestServiceDao.queryRequest(74l);
+        System.out.println(request);
+
+
+    }
 }

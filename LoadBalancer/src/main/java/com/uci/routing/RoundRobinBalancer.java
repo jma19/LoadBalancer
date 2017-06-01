@@ -67,7 +67,7 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
         while ((curIndex = nextServerSlot()) != -1) {
             try {
                 ServerInstance server = getServer(curIndex);
-                request.setIp(server.getIp()).setPort(server.getPort()).setRetryTimes(0);
+                request.setIp(server.getIp()).setPort(server.getPort());
                 return dispute(request);
             } catch (Exception exp) {
                 log.error(exp.getMessage(), exp);
@@ -86,6 +86,9 @@ public class RoundRobinBalancer extends AbstractLoadBalancer {
             }
         }
         log.info("No Server Available");
+        request.increaseReTimes();
+        request.setRemark("No Server Available");
+        requestServiceDao.updateRequest(request);
         throw ConstantException.NO_SERVER_AVAILABLE;
     }
 

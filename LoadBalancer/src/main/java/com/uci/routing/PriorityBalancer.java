@@ -4,6 +4,7 @@ import com.uci.mode.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,7 @@ import static com.uci.mode.RequestStatus.FAILED;
 /**
  * Created by junm5 on 5/24/17.
  */
+@Component
 public class PriorityBalancer extends AbstractLoadBalancer {
 
     private PriorityQueue<ServerInstance> priorityQueue = new PriorityQueue<>();
@@ -47,7 +49,7 @@ public class PriorityBalancer extends AbstractLoadBalancer {
         }
 
         try {
-            request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp()).setRetryTimes(0);
+            request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp());
             Response response = dispute(request);
             ServerInstance temp = response.getServerInstance().setIp(serverInstance.getIp()).setPort(serverInstance.getPort());
             priorityQueue.remove(serverInstance);

@@ -27,7 +27,7 @@
 
     </insert>
 
-    <select id="queryRequest" parameterType="java.lang.Long">
+    <select id="queryRequest" parameterType="java.lang.Long" resultMap="RequestMapper">
         select id, ip, port, type, invoke_type, path, params, retry_times, remark, status from tb_request
         WHERE  id = #{id}
     </select>
