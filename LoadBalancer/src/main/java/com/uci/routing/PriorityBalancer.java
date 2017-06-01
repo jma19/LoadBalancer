@@ -1,12 +1,11 @@
 package com.uci.routing;
 
+import com.uci.common.ConstantException;
 import com.uci.mode.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -42,35 +41,36 @@ public class PriorityBalancer extends AbstractLoadBalancer {
     }
 
     @Override
-    public Response distributeRequest(Request request) {
-        ServerInstance serverInstance = priorityQueue.peek();
-        if (serverInstance == null) {
-            return Response.fail("No Server available!!");
-        }
+    public Response distributeRequest(Request request) throws LBException {
+        ServerInstance serverInstance;
+        while ((serverInstance = priorityQueue.peek()) != null) {
+            try {
+                request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp());
+                Response response = dispute(request);
+                ServerInstance temp = response.getServerInstance().setIp(serverInstance.getIp()).setPort(serverInstance.getPort());
+                priorityQueue.remove(serverInstance);
+                priorityQueue.offer(temp);
+                return response;
+            } catch (Exception exp) {
+                log.error(exp.getMessage(), exp);
+                request.increaseReTimes();
+                if (InvokeType.ASY.getValue() == request.getInvokeType()) {
+                    request.setRemark(exp.getMessage()).setStatus(FAILED.getStatus());
+                    requestServiceDao.updateRequest(request);
+                    requestServiceDao.insertFailure(getFailureRequest(request));
 
-        try {
-            request.setPort(serverInstance.getPort()).setIp(serverInstance.getIp());
-            Response response = dispute(request);
-            ServerInstance temp = response.getServerInstance().setIp(serverInstance.getIp()).setPort(serverInstance.getPort());
-            priorityQueue.remove(serverInstance);
-            priorityQueue.offer(temp);
-            return response;
-        } catch (Exception exp) {
-            log.error(exp.getMessage(), exp);
-            request.increaseReTimes();
-            if (InvokeType.ASY.getValue() == request.getInvokeType()) {
-                request.setRemark(exp.getMessage()).setStatus(FAILED.getStatus());
-                requestServiceDao.updateRequest(request);
-                requestServiceDao.insertFailure(getFailureRequest(request));
-
-            } else {
-                if (request.getRetryTimes() == 20) {
-                    log.error("distribute failed, over distribute time limit!!");
-                    return Response.fail("Syn Request, distribute failed!! distribute time > " + LIMIT_TIMES);
+                } else {
+                    if (request.getRetryTimes() == 20) {
+                        log.error("distribute failed, over distribute time limit!!");
+                        return Response.fail("Syn Request, distribute failed!! distribute time > " + LIMIT_TIMES);
+                    }
                 }
             }
-            distributeRequest(request);
         }
-        return null;
+        log.info("No Server Available");
+        request.increaseReTimes();
+        request.setRemark("No Server Available");
+        requestServiceDao.updateRequest(request);
+        throw ConstantException.NO_SERVER_AVAILABLE;
     }
 }

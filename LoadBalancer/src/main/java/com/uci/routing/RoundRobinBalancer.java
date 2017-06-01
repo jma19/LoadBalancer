@@ -23,7 +23,7 @@ import static com.uci.mode.RequestStatus.FINISHING;
 /**
  * Created by junm5 on 4/25/17.
  */
-@Component
+//@Component
 public class RoundRobinBalancer extends AbstractLoadBalancer {
 
     private final Logger log = LoggerFactory.getLogger(RoundRobinBalancer.class);

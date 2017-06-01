@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * Created by junm5 on 5/27/17.
  */
-public class ServerInstance implements Comparator<ServerInstance> {
+public class ServerInstance implements Comparable<ServerInstance> {
     private String ip;
     private Integer port;
 
@@ -78,7 +78,8 @@ public class ServerInstance implements Comparator<ServerInstance> {
     }
 
     @Override
-    public int compare(ServerInstance o1, ServerInstance o2) {
-        return o2.freeMemory - o1.freeMemory;
+    public int compareTo(ServerInstance o) {
+        return o.freeMemory - this.freeMemory;
+
     }
 }
