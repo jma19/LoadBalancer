@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 public class ICallback {
 
-    private final Logger log = LoggerFactory.getLogger(DataBaseConfig.class);
+    private final Logger log = LoggerFactory.getLogger(ICallback.class);
 
     @Autowired
     private RequestServiceDao requestServiceDao;

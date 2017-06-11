@@ -14,7 +14,7 @@ import static com.uci.mode.RequestStatus.FAILED;
 /**
  * Created by junm5 on 5/24/17.
  */
-@Component
+//@Component
 public class PriorityBalancer extends AbstractLoadBalancer {
 
     private PriorityQueue<ServerInstance> priorityQueue = new PriorityQueue<>();

@@ -43,7 +43,7 @@ public class ServiceDiscoveryListener implements ServiceCacheListener {
     private ServiceCache<com.uci.mode.ServerInstance> serviceCache;
     private static final String CACHE_NAME = "TIPPER";
 
-    private static final String connection = "localhost:2181";
+    private static final String connection = "169.234.54.56:2181";
 
     @Autowired
     private ILoadBalancer iLoadBalancer;
