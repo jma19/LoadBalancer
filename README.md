@@ -103,7 +103,7 @@ Sever's Register implementation is in com.uci.conf.Registry file. We can modify 
 
 Start main function in com.uci.ServerApplication file.
 
-##Architecture
+## Architecture
 
 ![](arch.png)
 
