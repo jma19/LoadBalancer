@@ -89,7 +89,7 @@ private static final String connection = "169.234.54.56:2181";
 ~~~
 
 #### Sever Configuration
-Sever's simple implementation:
+Sever's implementation link:
 
 ~~~
 https://github.com/jma19/MockServer
