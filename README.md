@@ -10,8 +10,7 @@ Maven: https://maven.apache.org/install.html
 #### Install MySQL and Create Database and tables
  1. create database loadB
  2. create two tables using following commonds:
- ~~~
- 
+
 ~~~
 CREATE TABLE `tb_request` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
@@ -54,6 +53,7 @@ CREATE TABLE `tb_request_failure` (
 https://zookeeper.apache.org/doc/r3.1.2/zookeeperStarted.html
 
 start zookeeper
+
 ~~~
 bin/zkServer.sh start
 ~~~
