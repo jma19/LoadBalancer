@@ -2,12 +2,12 @@
 
 ### Prerequisites
 
-####Install Java 1.8  + Maven 
+#### Install Java 1.8  + Maven 
 Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Maven: https://maven.apache.org/install.html
 
-####Install MySQL and Create Database and tables
+#### Install MySQL and Create Database and tables
  1. create database loadB
  2. create two tables using following commonds:
  ~~~
@@ -50,7 +50,7 @@ CREATE TABLE `tb_request_failure` (
 
 ~~~
 
-####Install Zookeeper
+#### Install Zookeeper
 https://zookeeper.apache.org/doc/r3.1.2/zookeeperStarted.html
 
 start zookeeper
@@ -58,7 +58,7 @@ start zookeeper
 bin/zkServer.sh start
 ~~~
 
-####LoadBalancer Configuration 
+#### LoadBalancer Configuration 
 modify /LoadBalancer/LoadBalancer/src/main/resoureces/application.properties file
 
 Database connection config:
@@ -88,7 +88,7 @@ This can also be config in our code, just modify the following code (com.uci.dis
 private static final String connection = "169.234.54.56:2181";
 ~~~
 
-####Sever Configuration
+#### Sever Configuration
 Sever's simple implementation:
 
 ~~~
@@ -99,7 +99,7 @@ same as the loadbalancer, but  sver need to config the loadbalancer's callback u
 
 Sever's Register implementation is in com.uci.conf.Registry file. We can modify zookeeper's connection parameters here.
 
-###Running
+### Running
 
 Start main function in com.uci.ServerApplication file.
 
